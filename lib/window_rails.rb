@@ -51,12 +51,14 @@ module WindowRailsGenerators
   # content:: Updated content
   # options:: Hash of options
   #   * window -> Name of the window to update (defaults to last window)
+  #   * error -> Show error if window is not found (defaults false)
   # Updates the window with the new content. If the content is a string, it will
   # be placed into the window. If it is a Hash, it will be fed to render and the
   # result will be placed in the window (basically an easy way to integrate partials:
   # page.update_window(:partial => 'my_parital'))
   def update_window(content, options={})
     win = options.delete(:window)
+    error = options.delete(:error)
     if(content.is_a?(Hash))
       content = render(content)
     end
@@ -65,9 +67,12 @@ module WindowRailsGenerators
     if(win)
       self << "if(Windows.existsByName('#{win}')){"
       self << "  Windows.getWindowByName('#{win}').setHTMLContent('#{content}');"
-      self << "} else {"
-      self << "  alert('Unexpected error. Failed to locate correct window for output.');"
       self << "}"
+      if(error)
+        self << "else {"
+        self << "  alert('Unexpected error. Failed to locate correct window for output.');"
+        self << "}"
+      end
     else
       self << "Windows.windows.values().last().setHTMLContent('#{content}');"
     end
@@ -133,6 +138,20 @@ module WindowRailsGenerators
   # Close all open windows
   def close_all_windows
     self << "Windows.closeAll();"
+  end
+  
+  # args:: List of window names to refresh (All will be refreshed if :all is included)
+  # Refresh window contents
+  def refresh_window(*args)
+    self << "var myWin = null;"
+    if(args.include?(:all))
+      self << "Windows.windows.values().each(function(win){ win.refresh(); });"
+    else
+      args.each do |win|
+        self << "myWin = Windows.getWindowByName('#{escape_javascript(win.to_s)}');"
+        self << "if(myWin){ myWin.refresh(); }"
+      end
+    end
   end
   
 end
