@@ -1,5 +1,5 @@
 $LOAD_PATH.unshift File.expand_path(File.dirname(__FILE__)) + '/lib/'
-require 'lib/version'
+require 'window_rails/version'
 Gem::Specification.new do |s|
   s.name = 'window_rails'
   s.version = WindowRails::VERSION
