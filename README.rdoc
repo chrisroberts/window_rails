@@ -52,11 +52,11 @@ Rails to make it easy to use from a Rails app.
 
 == Documentation
 
-[WindowRails documentation]{http://chrisroberts.github.com/window_rails}
+{WindowRails documentation}[http://chrisroberts.github.com/window_rails]
 
 == Bugs/Features
 
-[Issues]{http://github.com/chrisroberts/window_rails/issues}
+{Issues}[http://github.com/chrisroberts/window_rails/issues]
 
 == Thanks
 
