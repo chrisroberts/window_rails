@@ -1,0 +1,63 @@
+== WindowRails
+
+WindowRails is a plugin for Rails that provides easy to use AJAXy windows. It is based
+completely on {Prototype Window}[http://prototype-window.xilinus.com/] with helpers for
+Rails to make it easy to use from a Rails app.
+
+=== Basic examples to get you started
+
+==== Linking to a window
+  <%= link_to_window('Link', :url => {:controller => :my_controller, :action => :my_action}, :modal => true, :className => 'alphacube', :window => 'some_name') %>
+  
+==== Opening a window via AJAX
+  def open_my_window
+    respond_to do |format|
+      format.html
+      format.js do
+        render :update do |page|
+          page.open_window({:partial => 'my_partial'}, :modal => true, :width => 400, :height => 200, :window => 'my_window')
+        end
+      end
+    end
+  end
+
+==== Updating a window via AJAX
+  def update_my_window
+    respond_to do |format|
+      format.html
+      format.js do
+        render :update do |page|
+          page.update_window({:partial => 'new_partial'}, :window => 'my_window')
+        end
+      end
+    end
+  end
+  
+==== Closing a window via AJAX
+  def close_my_window
+    respond_to do |format|
+      format.html
+      format.js do
+        render :update do |page|
+          page.close_window(:window => 'my_window')
+        end
+      end
+    end
+  end
+
+== Documentation
+
+{WindowRails documentation}[http://chrisroberts.github.com/window_rails]
+
+== Bugs/Features
+
+[Issues]{http://github.com/chrisroberts/window_rails/issues}
+
+== Thanks
+
+* Many thanks to Sébastien Gruhier (creator of {Prototype Window}[http://prototype-window.xilinus.com/])
+
+== License
+
+* Prototype Window was released under the MIT license
+* WindowRails continues on under the MIT license
