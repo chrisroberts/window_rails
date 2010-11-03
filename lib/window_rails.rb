@@ -111,6 +111,7 @@ module WindowRailsGenerators
       opts.merge!(constraints) if constraints.is_a?(Hash)
       self << "myWin.setConstraint(true, {#{opts.map{|k,v|"#{escape_javascript(k.to_s)}:'#{escape_javascript(v.to_s)}'"}.join(', ')}});"
     end
+    self << "myWin.setCloseCallback(function(win){ win.destroy(); return true; });"
     self << "myWin.showCenter(#{modal ? 'true' : 'false'});"
   end
   
@@ -120,11 +121,13 @@ module WindowRailsGenerators
   def close_window(options = {})
     win = options.delete(:window)
     win = escape_javascript(win) if win
+    self << "var myWin = null;"
     if(win)
-      self << "Windows.getWindowByName('#{win}').close();"
+      self << "myWin = Windows.getWindowByName('#{win}');"
     else
-      self << "if(Windows.windows.values().last()){ Windows.windows.values().last().close(); }"
+      self << "if(Windows.windows.values().last()){ myWin = Windows.windows.values().last(); }"
     end
+    self << "if(myWin){ myWin.close(); }"
   end
   
   # Close all open windows
