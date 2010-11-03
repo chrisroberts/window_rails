@@ -1,3 +1,8 @@
+++ Important note ++
+
+This is still in its infancy and is pretty unstable. This will be removed once it's ready
+for initial release.
+
 == WindowRails
 
 WindowRails is a plugin for Rails that provides easy to use AJAXy windows. It is based
