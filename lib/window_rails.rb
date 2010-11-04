@@ -182,7 +182,7 @@ module WindowRailsGenerators
   #   * :window -> name of window to close
   # Close the window of the provided name or the last opened window
   def close_window(options = {})
-    win = options.delete(:window)
+    win = options.is_a?(Hash) ? options.delete(:window) : options.to_s
     win = escape_javascript(win) if win
     self << "var myWin = null;"
     if(win)
