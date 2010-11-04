@@ -62,20 +62,76 @@ module WindowRailsGenerators
     if(content.is_a?(Hash))
       content = render(content)
     end
-    content = escape_javascript(content)
-    win = escape_javascript(win) if win
-    if(win)
-      self << "if(Windows.existsByName('#{win}')){"
-      self << "  Windows.getWindowByName('#{win}').setHTMLContent('#{content}');"
-      self << "}"
-      if(error)
-        self << "else {"
-        self << "  alert('Unexpected error. Failed to locate correct window for output.');"
-        self << "}"
-      end
+    self << check_for_window(win, error){ update_window_contents(content, win) }
+  end
+  
+  def check_for_window(name, error)
+    o = []
+    if(name.blank?)
+      o.push "if(Windows.windows.values().size() > 0){"
     else
-      self << "Windows.windows.values().last().setHTMLContent('#{content}');"
+      o.push "if(Windows.existsByName('#{escape_javascript(name)}')){"
     end
+    o.push yield if block_given?
+    o.push "}"
+    o.push "else { alert('Unexpected error. Failed to locate window for output.'); }" if error
+    o.join("\n")
+  end
+  
+  def else_block
+    o = []
+    o.push "else {"
+    o.push yield
+    o.push "}"
+    o.join("\n")
+  end
+  
+  def update_window_contents(content, win, focus=true)
+    if(win)
+      name = escape_javascript(win)
+      "Windows.getWindowByName('#{name}').setHTMLContent('#{escape_javascript(content)}');"
+    else
+      "Windows.windows.values().last().setHTMLContent('#{escape_javascript(content)}');"
+    end
+  end
+  
+  def focus_window(win)
+    unless(win.blank?)
+      "Windows.focus(Windows.getWindowByName('#{escape_javascript(win)}').getId());"
+    else
+      "Windows.focus(Windows.windows.values().last().getId());"
+    end
+  end
+  
+  def create_window(content, win, options)
+    o = []
+    o.push "var myWin = new Window({#{options.map{|k,v|"#{escape_javascript(k.to_s)}:'#{escape_javascript(v.to_s)}'"}.join(', ')}});"
+    o.push "Windows.registerByName('#{escape_javascript(win)}', myWin);" unless win.blank?
+    o.push "myWin.setHTMLContent('#{escape_javascript(content)}');" unless content.blank?
+    o.push "myWin.setCloseCallback(function(win){ win.destroy(); return true; });"
+    o.join("\n")
+  end
+  
+  def show_window(win, modal)
+    s = nil
+    if(win)
+      s = "Windows.getWindowByName('#{escape_javascript(win)}')"
+    else
+      s = 'Windows.windows.values().last()'
+    end
+    s += ".showCenter(#{modal ? 'true' : 'false'});"
+  end
+  
+  def apply_window_constraints(win, constraints)
+    opts = {:left => 0, :right => 0, :top => 0, :bottom => 0}
+    opts.merge!(constraints) if constraints.is_a?(Hash)
+    s = nil
+    unless(win.blank?)
+      s = "Windows.getWindowByName('#{escape_javascript(win)}')"
+    else
+      s = "Windows.windows.values().last()"
+    end
+    "#{s}.setConstraint(true, {#{opts.map{|k,v|"#{escape_javascript(k.to_s)}:'#{escape_javascript(v.to_s)}'"}.join(', ')}});"
   end
   
   # content:: Content for window
@@ -87,11 +143,13 @@ module WindowRailsGenerators
   #   * width -> Width of the window
   #   * height -> Height of the window
   #   * className -> Theme name for the window
+  #   * no_update -> Set to true to force creation of a new window even if window of same name already exists (defaults to false)
   # Creates a new window and displays it at the center of the viewport.
   def open_window(content, options)
     modal = options.delete(:modal)
     win = options.delete(:window)
     constraints = options.delete(:constraints)
+    no_update = options.delete(:no_update)
     if(content.is_a?(Hash))
       if(content[:url])
         options[:url] = url_for(content[:url])
@@ -102,22 +160,22 @@ module WindowRailsGenerators
     end
     options[:width] ||= 300
     options[:height] ||= 200
-    content = escape_javascript(content) if content
-    win = escape_javascript(win) if win
-    self << "var myWin = new Window({#{options.map{|k,v|"#{escape_javascript(k.to_s)}:'#{escape_javascript(v.to_s)}'"}.join(', ')}});";
-    unless(win.blank?)
-      self << "Windows.registerByName('#{win}', myWin);"
+    output = []
+    if(no_update)
+      output << create_window(content, win, options)
+      output.push apply_window_constraints(win, constraints) unless constraints == false
+      output << show_window(win, modal)
+    else
+      output.push check_for_window(win, false){
+        update_window_contents(content, win) + focus_window(win)
+      }
+      output.push else_block{
+        s = create_window(content, win, options)
+        s += apply_window_constraints(win, constraints) unless constraints == false
+        s += show_window(win, modal)
+      }
     end
-    if(content)
-      self << "myWin.setHTMLContent('#{content}');"
-    end
-    unless(constraints == false)
-      opts = {:left => 0, :right => 0, :top => 0, :bottom => 0}
-      opts.merge!(constraints) if constraints.is_a?(Hash)
-      self << "myWin.setConstraint(true, {#{opts.map{|k,v|"#{escape_javascript(k.to_s)}:'#{escape_javascript(v.to_s)}'"}.join(', ')}});"
-    end
-    self << "myWin.setCloseCallback(function(win){ win.destroy(); return true; });"
-    self << "myWin.showCenter(#{modal ? 'true' : 'false'});"
+    self << output.join("\n")
   end
   
   # options:: Hash of options
