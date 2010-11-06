@@ -17,14 +17,15 @@ module WindowRailsGenerators
   # Opens a confirmation window
   def open_confirm_window(msg, options={})
     options[:width] ||= 200
-    self << "Dialog.confirm('#{escape_javascript(msg)}', {#{options.map{|k,v|"#{escape_javascript(k)}:'#{escape_javascript(v)}'"}.join(',')}});"
+    self << "Dialog.confirm('#{escape_javascript(msg)}', {#{options.map{|k,v|"#{escape_javascript(k.to_s)}:'#{escape_javascript(v.to_s)}'"}.join(',')}});"
   end
   
   # msg:: Information message
   # options:: Hash of options values for info window
   # Open an information window
   def open_info_window(msg, options={})
-    self << "Dialog.info('#{escape_javascript(msg)}', {#{options.map{|k,v|"#{escape_javascript(k)}:'#{escape_javascript(v)}'"}.join(',')}});"
+    options[:width] ||= 200
+    self << "Dialog.info('#{escape_javascript(msg)}', {#{options.map{|k,v|"#{escape_javascript(k.to_s)}:'#{escape_javascript(v.to_s)}'"}.join(',')}});"
   end
   
   # Close an information window
@@ -60,14 +61,14 @@ module WindowRailsGenerators
     else
       self << "if(Windows.existsByName('#{escape_javascript(name)}')){"
     end
-    self << yield if block_given?
+    yield if block_given?
     self << "}"
     self << "else { alert('Unexpected error. Failed to locate window for output.'); }" if error
   end
   
   def else_block
     self << "else {"
-    self << yield if block_given?
+    yield if block_given?
     self << "}"
   end
   
@@ -145,7 +146,9 @@ module WindowRailsGenerators
     output = []
     if(no_update)
       create_window(content, win, options)
-      apply_window_constraints(win, constraints) unless constraints == false
+      unless(constraints == false)
+        apply_window_constraints(win, constraints)
+      end
       show_window(win, modal)
     else
       check_for_window(win, false) do
@@ -154,8 +157,10 @@ module WindowRailsGenerators
       end
       else_block do
         create_window(content, win, options)
-        apply_window_constraints(win, constriants) unless constraints == false
-        show_windw(win, modal)
+        unless(constraints == false)
+          apply_window_constraints(win, constraints)
+        end
+        show_window(win, modal)
       end
     end
   end
