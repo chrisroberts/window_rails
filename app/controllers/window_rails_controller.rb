@@ -17,6 +17,9 @@ class WindowRailsController < ActionController::Base
   end
   
   # Opens a new window
+  # NOTE: It is important to note that the contents of the window will be opened
+  # within an IFrame. This means links within the window will not be able to
+  # communicate with the page around it (like closing the window)
   def open_window
     respond_to do |format|
       format.html do
@@ -24,7 +27,7 @@ class WindowRailsController < ActionController::Base
       end
       format.js do
         render :update do |page|
-          page.activate_window({:url => params[:window_url]}, params[:window_options])
+          page.open_window({:url => params[:window_url]}, params[:window_options])
         end
       end
     end
