@@ -1,5 +1,5 @@
 require 'window_rails/window_rails_view'
-require 'window_rails/weindow_rails_generators'
+require 'window_rails/window_rails_generators'
 
 # Load everything into rails
 if(defined? Rails)
