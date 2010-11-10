@@ -1,0 +1,9 @@
+== v0.1.0
+* Lots of cleanup
+* Better builders available
+* #observe_dynamically_loaded_field to watch things that have been inserted into the DOM
+* Better window handling
+* Default class set to alphacube
+
+== v0.0.1
+* Initial release

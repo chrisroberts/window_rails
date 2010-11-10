@@ -20,7 +20,6 @@ def install_all
   install_javascripts
   install_themes
   install_version
-  puts 'INSTALLED ALL'
 end
 
 ## Place version file and check for it. install if not found.
