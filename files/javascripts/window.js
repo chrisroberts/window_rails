@@ -794,7 +794,9 @@ Window.prototype = {
       this.options.showEffect(this.element);  
       
     this._checkIEOverlapping();
-    WindowUtilities.focusedWindow = this
+    WindowUtilities.focusedWindow = this;
+//     this.getContent().style.display = 'none';
+    this.getContent().style.scroll = 'auto';
     this._notify("onShow");   
   },
   
