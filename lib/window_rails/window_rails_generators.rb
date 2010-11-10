@@ -1,7 +1,6 @@
 module WindowRailsGenerators
   
   include ActionView::Helpers::JavaScriptHelper
-  include ActionView::Helpers::UrlHelper
   include ActionView::Helpers::TagHelper
   
   # msg:: Alert message
@@ -76,7 +75,7 @@ module WindowRailsGenerators
     unless(win.blank?)
       self << "Windows.getWindowByName('#{escape_javascript(win)}').setHTMLContent('#{escape_javascript(content)}');"
     else
-      self << "Windows.window.values().last().setHTMLContent('#{escape_javascript(content)}');"
+      self << "Windows.windows.values().last().setHTMLContent('#{escape_javascript(content)}');"
     end
   end
 
@@ -128,14 +127,15 @@ module WindowRailsGenerators
   #   * className -> Theme name for the window
   #   * no_update -> Set to true to force creation of a new window even if window of same name already exists (defaults to false)
   # Creates a new window and displays it at the center of the viewport.
-  def open_window(content, options)
+  def open_window(content, options={})
     modal = options.delete(:modal)
     win = options.delete(:window)
     constraints = options.delete(:constraints)
     no_update = options.delete(:no_update)
+    options[:className] = 'alphacube' unless options[:className]
     if(content.is_a?(Hash))
       if(content[:url])
-        options[:url] = url_for(content[:url])
+        options[:url] = @context.url_for(content[:url])
         content = nil
       else
         content = render(content)
@@ -196,6 +196,14 @@ module WindowRailsGenerators
         self << "if(myWin){ myWin.refresh(); }"
       end
     end
+  end
+  
+  def observe_dynamically_loaded_field(field_id, options={})
+    f = options.delete(:function)
+    unless(f)
+      f = "function(event){ new Ajax.Request('#{escape_javascript(@context.url_for(options[:url]).to_s)}', {asynchronous:true, evalScripts:true,parameters:'#{escape_javascript(options[:with].to_s)}='+$('#{escape_javascript(options[:with].to_s)}').getValue()})}"
+    end
+    self << "if($('#{escape_javascript(field_id.to_s)}')){ $('#{escape_javascript(field_id.to_s)}').observe('change', #{f}); }"
   end
   
 end
