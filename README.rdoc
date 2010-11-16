@@ -9,7 +9,7 @@ Rails to make it easy to use from a Rails app.
 After install, add these in the head of your application.html.erb file:
 
   <%= javascript_include_tag 'window_rails/window' %>
-  <%= stylesheet_link_tag '/themes/alphacube' %>
+  <%= stylesheet_link_tag *%w(/themes/alphacube /themes/default themes/alert) %>
   
 Alphacube is the default theme used by window_rails. Be sure to add the css link if you plan on using other themes.
 
