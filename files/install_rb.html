@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>File: install.rb [RDoc Documentation]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='file' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>install.rb</h1>
+        <div class='paths'>
+          install.rb
+        </div>
+        <div class='last-update'>
+          Last Update:
+          <span class='datetime'>Thu Nov 18 08:22:17 -0800 2010</span>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>public instance</h3>
+            <ol>
+              <li><a href="#M000004">install_all</a></li>
+              <li><a href="#M000001">install_javascripts</a></li>
+              <li><a href="#M000002">install_themes</a></li>
+              <li><a href="#M000003">install_version</a></li>
+            </ol>
+          </div>
+          <div id='context'>
+            <div id='requires'>
+              <h2>Required files</h2>
+              <ol>
+                <li>window_rails/version</li>
+              </ol>
+            </div>
+          </div>
+          <div id='section'>
+            <div id='methods'>
+              <h2>Public instance methods</h2>
+              <div class='method public-instance' id='method-M000004'>
+                <a name='M000004'></a>
+                <div class='synopsis'>
+                  <span class='name'>install_all</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000004-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000004-source'><span class="ruby-comment cmt"># File install.rb, line 19</span>&#x000A;<span class="ruby-keyword kw">def</span> <span class="ruby-identifier">install_all</span>&#x000A;  <span class="ruby-identifier">install_javascripts</span>&#x000A;  <span class="ruby-identifier">install_themes</span>&#x000A;  <span class="ruby-identifier">install_version</span>&#x000A;<span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000001'>
+                <a name='M000001'></a>
+                <div class='synopsis'>
+                  <span class='name'>install_javascripts</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000001-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000001-source'><span class="ruby-comment cmt"># File install.rb, line 3</span>&#x000A;<span class="ruby-keyword kw">def</span> <span class="ruby-identifier">install_javascripts</span>&#x000A;  <span class="ruby-identifier">raise</span> <span class="ruby-value str">'Unknown Rails path'</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-keyword kw">defined?</span> <span class="ruby-constant">RAILS_ROOT</span>&#x000A;  <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">cp_r</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-keyword kw">__FILE__</span>), <span class="ruby-value str">'files'</span>, <span class="ruby-value str">'javascripts'</span>, <span class="ruby-constant">File</span><span class="ruby-operator">::</span><span class="ruby-constant">SEPARATOR</span>, <span class="ruby-value str">'.'</span>), <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">RAILS_ROOT</span>, <span class="ruby-value str">'public'</span>, <span class="ruby-value str">'javascripts'</span>, <span class="ruby-value str">'window_rails'</span>))&#x000A;<span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000002'>
+                <a name='M000002'></a>
+                <div class='synopsis'>
+                  <span class='name'>install_themes</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000002-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000002-source'><span class="ruby-comment cmt"># File install.rb, line 8</span>&#x000A;<span class="ruby-keyword kw">def</span> <span class="ruby-identifier">install_themes</span>&#x000A;  <span class="ruby-identifier">raise</span> <span class="ruby-value str">'Unknown Rails path'</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-keyword kw">defined?</span> <span class="ruby-constant">RAILS_ROOT</span>&#x000A;  <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">cp_r</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-keyword kw">__FILE__</span>), <span class="ruby-value str">'files'</span>, <span class="ruby-value str">'themes'</span>), <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">RAILS_ROOT</span>, <span class="ruby-value str">'public'</span>))&#x000A;<span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000003'>
+                <a name='M000003'></a>
+                <div class='synopsis'>
+                  <span class='name'>install_version</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000003-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000003-source'><span class="ruby-comment cmt"># File install.rb, line 13</span>&#x000A;<span class="ruby-keyword kw">def</span> <span class="ruby-identifier">install_version</span>&#x000A;  <span class="ruby-identifier">f</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">RAILS_ROOT</span>, <span class="ruby-value str">'public'</span>, <span class="ruby-value str">'javascripts'</span>, <span class="ruby-value str">'window_rails'</span>, <span class="ruby-value str">'version'</span>), <span class="ruby-value str">'w'</span>)&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">puts</span> <span class="ruby-constant">WindowRails</span><span class="ruby-operator">::</span><span class="ruby-constant">VERSION</span>&#x000A;  <span class="ruby-identifier">f</span>.<span class="ruby-identifier">close</span>&#x000A;<span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

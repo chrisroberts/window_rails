@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>File: behavior.htc [RDoc Documentation]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='file' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>behavior.htc</h1>
+        <div class='paths'>
+          files/themes/behavior.htc
+        </div>
+        <div class='last-update'>
+          Last Update:
+          <span class='datetime'>Thu Nov 18 08:22:17 -0800 2010</span>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            <p>
+            <public:component> <public:attach event=&#8220;onpropertychange&#8221;
+            onevent=&#8220;propertyChanged()&#8221; /> <script>
+            </p>
+            <p>
+            var supported = /MSIE (5.5)|[6789]/.test(navigator.userAgent) &amp;&amp;
+            navigator.platform == &#8220;Win32&#8221;; var realSrc; var blankSrc =
+            &#8220;blank.gif&#8220;;
+            </p>
+            <p>
+            if (supported) fixImage();
+            </p>
+            <p>
+            function propertyChanged() {
+            </p>
+            <pre>if (!supported) return;&#x000A;&#x000A;var pName = event.propertyName;&#x000A;if (pName != &quot;src&quot;) return;&#x000A;// if not set to blank&#x000A;if ( ! new RegExp(blankSrc).test(src))&#x000A;   fixImage();</pre>
+            <p>
+            };
+            </p>
+            <p>
+            function fixImage() {
+            </p>
+            <pre>// get src&#x000A;var src = element.src;&#x000A;&#x000A;// check for real change&#x000A;if (src == realSrc) {&#x000A;   element.src = blankSrc;&#x000A;   return;&#x000A;}&#x000A;&#x000A;if ( ! new RegExp(blankSrc).test(src)) {&#x000A;   // backup old src&#x000A;   realSrc = src;&#x000A;}&#x000A;&#x000A;// test for png&#x000A;if ( /\.png$/.test( realSrc.toLowerCase() ) ) {&#x000A;   // set blank image&#x000A;   element.src = blankSrc;&#x000A;   // set filter&#x000A;   element.runtimeStyle.filter = &quot;progid:DXImageTransform.Microsoft.AlphaImageLoader(src='&quot; +&#x000A;                                  src + &quot;',sizingMethod='scale')&quot;;&#x000A;}&#x000A;else {&#x000A;   // remove filter&#x000A;   element.runtimeStyle.filter = &quot;&quot;;&#x000A;}</pre>
+            <p>
+            }
+            </p>
+            <p>
+            </script> </public:component>
+            </p>
+          </div>
+          <div id='section'>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

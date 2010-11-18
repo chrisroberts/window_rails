@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>File: window_effects.js [RDoc Documentation]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='file' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>window_effects.js</h1>
+        <div class='paths'>
+          files/javascripts/window_effects.js
+        </div>
+        <div class='last-update'>
+          Last Update:
+          <span class='datetime'>Thu Nov 18 08:22:17 -0800 2010</span>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            <p>
+            Effect.ResizeWindow = Class.create();
+            Object.extend(Object.extend(Effect.ResizeWindow.prototype,
+            Effect.Base.prototype), {
+            </p>
+            <pre>initialize: function(win, top, left, width, height) {&#x000A;  this.window = win;&#x000A;  this.window.resizing = true;&#x000A;&#x000A;  var size = win.getSize();&#x000A;  this.initWidth    = parseFloat(size.width);&#x000A;  this.initHeight   = parseFloat(size.height);&#x000A;&#x000A;  var location = win.getLocation();&#x000A;  this.initTop    = parseFloat(location.top);&#x000A;  this.initLeft   = parseFloat(location.left);&#x000A;&#x000A;  this.width    = width != null  ? parseFloat(width)  : this.initWidth;&#x000A;  this.height   = height != null ? parseFloat(height) : this.initHeight;&#x000A;  this.top      = top != null    ? parseFloat(top)    : this.initTop;&#x000A;  this.left     = left != null   ? parseFloat(left)   : this.initLeft;&#x000A;&#x000A;  this.dx     = this.left   - this.initLeft;&#x000A;  this.dy     = this.top    - this.initTop;&#x000A;  this.dw     = this.width  - this.initWidth;&#x000A;  this.dh     = this.height - this.initHeight;&#x000A;&#x000A;  this.r2      = $(this.window.getId() + &quot;_row2&quot;);&#x000A;  this.content = $(this.window.getId() + &quot;_content&quot;);&#x000A;&#x000A;  this.contentOverflow = this.content.getStyle(&quot;overflow&quot;) || &quot;auto&quot;;&#x000A;  this.content.setStyle({overflow: &quot;hidden&quot;});&#x000A;&#x000A;  // Wired mode&#x000A;  if (this.window.options.wiredDrag) {&#x000A;    this.window.currentDrag = win._createWiredElement();&#x000A;    this.window.currentDrag.show();&#x000A;    this.window.element.hide();&#x000A;  }&#x000A;&#x000A;  this.start(arguments[5]);&#x000A;},&#x000A;&#x000A;update: function(position) {&#x000A;  var width  = Math.floor(this.initWidth  + this.dw * position);&#x000A;  var height = Math.floor(this.initHeight + this.dh * position);&#x000A;  var top    = Math.floor(this.initTop    + this.dy * position);&#x000A;  var left   = Math.floor(this.initLeft   + this.dx * position);&#x000A;&#x000A;  if (window.ie) {&#x000A;    if (Math.floor(height) == 0)&#x000A;      this.r2.hide();&#x000A;    else if (Math.floor(height) &gt;1)&#x000A;      this.r2.show();&#x000A;  }&#x000A;  this.r2.setStyle({height: height});&#x000A;  this.window.setSize(width, height);&#x000A;  this.window.setLocation(top, left);&#x000A;},&#x000A;&#x000A;finish: function(position) {&#x000A;  // Wired mode&#x000A;  if (this.window.options.wiredDrag) {&#x000A;    this.window._hideWiredElement();&#x000A;    this.window.element.show();&#x000A;  }&#x000A;&#x000A;  this.window.setSize(this.width, this.height);&#x000A;  this.window.setLocation(this.top, this.left);&#x000A;  this.r2.setStyle({height: null});&#x000A;&#x000A;  this.content.setStyle({overflow: this.contentOverflow});&#x000A;&#x000A;  this.window.resizing = false;&#x000A;}</pre>
+            <p>
+            });
+            </p>
+            <p>
+            Effect.ModalSlideDown = function(element) {
+            </p>
+            <pre>var windowScroll = WindowUtilities.getWindowScroll();&#x000A;var height = element.getStyle(&quot;height&quot;);&#x000A;element.setStyle({top: - (parseFloat(height) - windowScroll.top) + &quot;px&quot;});&#x000A;&#x000A;element.show();&#x000A;return new Effect.Move(element, Object.extend({ x: 0, y: parseFloat(height) }, arguments[1] || {}));</pre>
+            <p>
+            };
+            </p>
+            <p>
+            Effect.ModalSlideUp = function(element) {
+            </p>
+            <pre>var height = element.getStyle(&quot;height&quot;);&#x000A;return new Effect.Move(element, Object.extend({ x: 0, y: -parseFloat(height) }, arguments[1] || {}));</pre>
+            <p>
+            };
+            </p>
+            <p>
+            PopupEffect = Class.create(); PopupEffect.prototype = {
+            </p>
+            <pre>initialize: function(htmlElement) {&#x000A;  this.html = $(htmlElement);&#x000A;  this.options = Object.extend({className: &quot;popup_effect&quot;, duration: 0.4}, arguments[1] || {});&#x000A;&#x000A;},&#x000A;show: function(element, options) {&#x000A;  var position = Position.cumulativeOffset(this.html);&#x000A;  var size = this.html.getDimensions();&#x000A;  var bounds = element.win.getBounds();&#x000A;  this.window =  element.win;&#x000A;  // Create a div&#x000A;  if (!this.div) {&#x000A;    this.div = document.createElement(&quot;div&quot;);&#x000A;    this.div.className = this.options.className;&#x000A;    this.div.style.height = size.height + &quot;px&quot;;&#x000A;    this.div.style.width  = size.width  + &quot;px&quot;;&#x000A;    this.div.style.top    = position[1] + &quot;px&quot;;&#x000A;    this.div.style.left   = position[0] + &quot;px&quot;;&#x000A;    this.div.style.position = &quot;absolute&quot;&#x000A;    document.body.appendChild(this.div);&#x000A;  }&#x000A;  if (this.options.fromOpacity)&#x000A;    this.div.setStyle({opacity: this.options.fromOpacity})&#x000A;  this.div.show();&#x000A;  var style = &quot;top:&quot; + bounds.top + &quot;;left:&quot; +bounds.left + &quot;;width:&quot; + bounds.width +&quot;;height:&quot; + bounds.height;&#x000A;  if (this.options.toOpacity)&#x000A;    style += &quot;;opacity:&quot; + this.options.toOpacity;&#x000A;&#x000A;  new Effect.Morph(this.div ,{style: style, duration: this.options.duration, afterFinish: this._showWindow.bind(this)});&#x000A;},&#x000A;&#x000A;hide: function(element, options) {&#x000A;  var position = Position.cumulativeOffset(this.html);&#x000A;  var size = this.html.getDimensions();&#x000A;  this.window.visible = true;&#x000A;  var bounds = this.window.getBounds();&#x000A;  this.window.visible = false;&#x000A;&#x000A;  this.window.element.hide();&#x000A;&#x000A;  this.div.style.height = bounds.height;&#x000A;  this.div.style.width  = bounds.width;&#x000A;  this.div.style.top    = bounds.top;&#x000A;  this.div.style.left   = bounds.left;&#x000A;&#x000A;  if (this.options.toOpacity)&#x000A;    this.div.setStyle({opacity: this.options.toOpacity})&#x000A;&#x000A;  this.div.show();&#x000A;  var style = &quot;top:&quot; + position[1] + &quot;px;left:&quot; + position[0] + &quot;px;width:&quot; + size.width +&quot;px;height:&quot; + size.height + &quot;px&quot;;&#x000A;&#x000A;  if (this.options.fromOpacity)&#x000A;    style += &quot;;opacity:&quot; + this.options.fromOpacity;&#x000A;  new Effect.Morph(this.div ,{style: style, duration: this.options.duration, afterFinish: this._hideDiv.bind(this)});&#x000A;},&#x000A;&#x000A;_showWindow: function() {&#x000A;  this.div.hide();&#x000A;  this.window.element.show();&#x000A;},&#x000A;&#x000A;_hideDiv: function() {&#x000A;  this.div.hide();&#x000A;}</pre>
+            <p>
+            }
+            </p>
+          </div>
+          <div id='section'>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>File: README.rdoc [RDoc Documentation]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='file' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>README.rdoc</h1>
+        <div class='paths'>
+          README.rdoc
+        </div>
+        <div class='last-update'>
+          Last Update:
+          <span class='datetime'>Thu Nov 18 08:22:17 -0800 2010</span>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            <h2><a href="../classes/WindowRails.html">WindowRails</a></h2>
+            <p>
+            <a href="../classes/WindowRails.html">WindowRails</a> is a plugin for Rails
+            that provides easy to use AJAXy windows. It is based completely on <a
+            href="http://prototype-window.xilinus.com/">Prototype Window</a> with
+            helpers for Rails to make it easy to use from a Rails app.
+            </p>
+            <h2>Configuration</h2>
+            <p>
+            After install, add these in the head of your application.html.erb file:
+            </p>
+            <pre>&lt;%= javascript_include_tag 'window_rails/window' %&gt;&#x000A;&lt;%= stylesheet_link_tag *%w(/themes/alphacube /themes/default themes/alert) %&gt;</pre>
+            <p>
+            Alphacube is the default theme used by window_rails. Be sure to add the css
+            link if you plan on using other themes.
+            </p>
+            <h3>Basic examples to get you started</h3>
+            <h4>Linking to a window</h4>
+            <pre>&lt;%= link_to_window('Link', :url =&gt; {:controller =&gt; :my_controller, :action =&gt; :my_action}, :modal =&gt; true, :className =&gt; 'alphacube', :window =&gt; 'some_name') %&gt;</pre>
+            <h4>Opening a window via AJAX</h4>
+            <pre>def open_my_window&#x000A;  respond_to do |format|&#x000A;    format.html&#x000A;    format.js do&#x000A;      render :update do |page|&#x000A;        page.open_window({:partial =&gt; 'my_partial'}, :modal =&gt; true, :width =&gt; 400, :height =&gt; 200, :window =&gt; 'my_window')&#x000A;      end&#x000A;    end&#x000A;  end&#x000A;end</pre>
+            <h4>Updating a window via AJAX</h4>
+            <pre>def update_my_window&#x000A;  respond_to do |format|&#x000A;    format.html&#x000A;    format.js do&#x000A;      render :update do |page|&#x000A;        page.update_window({:partial =&gt; 'new_partial'}, :window =&gt; 'my_window')&#x000A;      end&#x000A;    end&#x000A;  end&#x000A;end</pre>
+            <h4>Closing a window via AJAX</h4>
+            <pre>def close_my_window&#x000A;  respond_to do |format|&#x000A;    format.html&#x000A;    format.js do&#x000A;      render :update do |page|&#x000A;        page.close_window(:window =&gt; 'my_window')&#x000A;      end&#x000A;    end&#x000A;  end&#x000A;end</pre>
+            <h2>Documentation</h2>
+            <p>
+            <a href="http://chrisroberts.github.com/window_rails">WindowRails
+            documentation</a>
+            </p>
+            <h2>Bugs/Features</h2>
+            <p>
+            <a href="http://github.com/chrisroberts/window_rails/issues">Issues</a>
+            </p>
+            <h2>Thanks</h2>
+            <ul>
+            <li>Many thanks to Sébastien Gruhier (creator of <a
+            href="http://prototype-window.xilinus.com/">Prototype Window</a>)
+            
+            </li>
+            </ul>
+            <h2>License</h2>
+            <ul>
+            <li>Prototype Window was released under the MIT license
+            
+            </li>
+            <li><a href="../classes/WindowRails.html">WindowRails</a> continues on under
+            the MIT license
+            
+            </li>
+            </ul>
+          </div>
+          <div id='section'>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

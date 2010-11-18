@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>File: pngbehavior.htc [RDoc Documentation]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='file' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>pngbehavior.htc</h1>
+        <div class='paths'>
+          files/themes/lighting/pngbehavior.htc
+        </div>
+        <div class='last-update'>
+          Last Update:
+          <span class='datetime'>Thu Nov 18 08:22:17 -0800 2010</span>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            <p>
+            <public:component> <public:attach event=&#8220;onpropertychange&#8221;
+            onevent=&#8220;doFix()&#8221; />
+            </p>
+            <p>
+            <script type=&#8220;text/javascript&#8220;>
+            </p>
+            <p>
+            // IE5.5+ PNG Alpha Fix v1.0RC4 // &#169; 2004-2005 Angus Turnbull <a
+            href="http://www.twinhelix.com">www.twinhelix.com</a>
+            </p>
+            <p>
+            // This is licensed under the CC-GNU LGPL, version 2.1 or later. // For
+            details, see: <a
+            href="http://creativecommons.org/licenses/LGPL/2.1/">creativecommons.org/licenses/LGPL/2.1/</a>
+            </p>
+            <p>
+            // This must be a path to a blank image. That&#8217;s all the configuration
+            you need. if (typeof blankImg == &#8216;undefined&#8217;) var blankImg =
+            &#8216;blank.gif&#8217;;
+            </p>
+            <p>
+            var f = &#8216;DXImageTransform.Microsoft.AlphaImageLoader&#8217;;
+            </p>
+            <p>
+            function filt(s, m) {
+            </p>
+            <pre>if (filters[f])&#x000A;{&#x000A; filters[f].enabled = s ? true : false;&#x000A; if (s) with (filters[f]) { src = s; sizingMethod = m }&#x000A;}&#x000A;else if (s) style.filter = 'progid:'+f+'(src=&quot;'+s+'&quot;,sizingMethod=&quot;'+m+'&quot;)';</pre>
+            <p>
+            }
+            </p>
+            <p>
+            function doFix() {
+            </p>
+            <pre> alert('ok')&#x000A;&#x000A;// Assume IE7 is OK.&#x000A;if (!/MSIE (5\.5|6\.)/.test(navigator.userAgent) ||&#x000A; (event &amp;&amp; !/(background|src)/.test(event.propertyName))) return;&#x000A;&#x000A;var bgImg = currentStyle.backgroundImage || style.backgroundImage;&#x000A;&#x000A;if (tagName == 'IMG')&#x000A;{&#x000A; if ((/\.png$/i).test(src))&#x000A; {&#x000A;  if (currentStyle.width == 'auto' &amp;&amp; currentStyle.height == 'auto')&#x000A;   style.width = offsetWidth + 'px';&#x000A;  filt(src, 'scale');&#x000A;  src = blankImg;&#x000A; }&#x000A; else if (src.indexOf(blankImg) &lt; 0) filt();&#x000A;}&#x000A;else if (bgImg &amp;&amp; bgImg != 'none')&#x000A;{&#x000A; if (bgImg.match(/^url[(&quot;']+(.*\.png)[)&quot;']+$/i))&#x000A; {&#x000A;  var s = RegExp.$1;&#x000A;  if (currentStyle.width == 'auto' &amp;&amp; currentStyle.height == 'auto')&#x000A;   style.width = offsetWidth + 'px';&#x000A;  style.backgroundImage = 'none';&#x000A;  filt(s, 'crop');&#x000A;  // IE link fix.&#x000A;  for (var n = 0; n &lt; childNodes.length; n++)&#x000A;   if (childNodes[n].style) childNodes[n].style.position = 'relative';&#x000A; }&#x000A; else filt();&#x000A;}</pre>
+            <p>
+            }
+            </p>
+            <p>
+            doFix();
+            </p>
+          </div>
+          <div id='section'>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>
