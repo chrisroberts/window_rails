@@ -11,6 +11,6 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
   s.has_rdoc = true
   s.extra_rdoc_files = ['README.rdoc', 'LICENSE', 'CHANGELOG.rdoc']
-  s.add_dependency 'rails'
+  s.add_dependency 'rails', '>= 2.3'
   s.files = %w(LICENSE README.rdoc CHANGELOG.rdoc init.rb install.rb uninstall.rb) + Dir.glob("{app,files,lib}/**/*")
 end
