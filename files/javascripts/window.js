@@ -287,8 +287,13 @@ Window.prototype = {
   },
   
   setAjaxContent: function(url, options, showCentered, showModal) {
-    this.showFunction = showCentered ? "showCenter" : "show";
-    this.showModal = showModal || false;
+    if(showCentered){
+      this.showFunction = showCentered ? "showCenter" : "show";
+      this.showModal = showModal || false;
+    } else {
+      this.showFunction = null;
+      this.showModal = null;
+    }
   
     options = options || {};
 
@@ -309,7 +314,9 @@ Window.prototype = {
     if (this.onComplete)
       this.onComplete(originalRequest);
     this.onComplete = null;
-    this[this.showFunction](this.showModal)
+    if(this.showFunction){
+      this[this.showFunction](this.showModal)
+    }
   },
   
   setURL: function(url) {
