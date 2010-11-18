@@ -106,7 +106,11 @@ module WindowRailsGenerators
   def create_window(content, win, options)
     self << "var myWin = new Window({#{options.map{|k,v|"#{escape_javascript(k.to_s)}:'#{escape_javascript(v.to_s)}'"}.join(', ')}});"
     self << "Windows.registerByName('#{escape_javascript(win)}', myWin);" unless win.blank?
-    self << "myWin.setHTMLContent('#{escape_javascript(content)}');" unless content.blank?
+    if(content.is_a?(Hash) && content[:url])
+      self << "myWin.setAjaxContent('#{escape_javascript(content[:url])}');"
+    elsif(!content.blank?)
+      self << "myWin.setHTMLContent('#{escape_javascript(content.to_s)}');"
+    end
     self << "myWin.setCloseCallback(function(win){ win.destroy(); return true; });"
   end
   
@@ -143,15 +147,23 @@ module WindowRailsGenerators
   
   # content:: Content for window
   # options:: Hash of options
-  #   * modal -> Window should be modal
-  #   * window -> Name to reference window (used for easy updating and closing)
-  #   * constraints -> Hash containing top,left,right,bottom values for padding from edges. False value will turn off constraints (window can travel out of viewport)
-  #   * url -> URL to load into the window
-  #   * width -> Width of the window
-  #   * height -> Height of the window
-  #   * className -> Theme name for the window
-  #   * no_update -> Set to true to force creation of a new window even if window of same name already exists (defaults to false)
-  # Creates a new window and displays it at the center of the viewport.
+  #   * :modal -> Window should be modal
+  #   * :window -> Name to reference window (used for easy updating and closing)
+  #   * :constraints -> Hash containing top,left,right,bottom values for padding from edges. False value will turn off constraints (window can travel out of viewport)
+  #   * :iframe -> URL to load within an IFrame in the window
+  #   * :width -> Width of the window
+  #   * :height -> Height of the window
+  #   * :className -> Theme name for the window
+  #   * :no_update -> Set to true to force creation of a new window even if window of same name already exists (defaults to false)
+  # Creates a new window and displays it at the center of the viewport. Content can be provided as
+  # a string, or as a Hash. If :url is defined, the window will be loaded with the contents of the request. If not, the hash
+  # will be passed to #render and the string will be displayed.
+  # Important note:
+  #   There are two ways to load remote content. The first is to use :url => 'http://host/page.html' for content. This will
+  #   load the contents directly into the window. The second is to set content to nil and pass :iframe => 'http://host/page.html'
+  #   in the options. This later form will load the contents within an IFrame in the window. This is useful in that it will
+  #   be isolated from the current page, but this isolation means it cannot communicate with other windows on the page (including
+  #   its own).
   def open_window(content, options={})
     modal = options.delete(:modal)
     win = options.delete(:window)
