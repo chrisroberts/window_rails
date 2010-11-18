@@ -54,6 +54,10 @@ module WindowRailsGenerators
     self << check_for_window(win, error){ update_window_contents(content, win) }
   end
   
+  # name:: Name of the window
+  # error:: Will throw an alert if window is not found
+  # Checks for a window of the given name. If a block is provided, it will be executed
+  # if the window is found
   def check_for_window(name, error)
     if(name.blank?)
       self <<  "if(Windows.windows.values().size() > 0){"
@@ -65,13 +69,18 @@ module WindowRailsGenerators
     self << "else { alert('Unexpected error. Failed to locate window for output.'); }" if error
   end
   
+  # Simply wraps a block within an else statement
   def else_block
     self << "else {"
     yield if block_given?
     self << "}"
   end
   
-  def update_window_contents(content, win)
+  # content:: String content
+  # win:: Name of window
+  # Updates the contents of the window. If no window name is provided, the topmost window
+  # will be updated
+  def update_window_contents(content, win=nil)
     unless(win.blank?)
       self << "Windows.getWindowByName('#{escape_javascript(win)}').setHTMLContent('#{escape_javascript(content)}');"
     else
@@ -79,7 +88,9 @@ module WindowRailsGenerators
     end
   end
 
-  def focus_window(win)
+  # win:: Name of window
+  # Will focus the window. If no name provided, topmost window will be focused
+  def focus_window(win=nil)
     unless(win.blank?)
       self << "Windows.focus(Windows.getWindowByName('#{escape_javascript(win)}').getId());"
     else
@@ -87,6 +98,11 @@ module WindowRailsGenerators
     end
   end
 
+  # content:: String content
+  # win:: Name of window
+  # options:: Options to be passed onto window
+  # Creates a new window. Generally this should not be called,
+  # rather #open_window should be used
   def create_window(content, win, options)
     self << "var myWin = new Window({#{options.map{|k,v|"#{escape_javascript(k.to_s)}:'#{escape_javascript(v.to_s)}'"}.join(', ')}});"
     self << "Windows.registerByName('#{escape_javascript(win)}', myWin);" unless win.blank?
@@ -94,6 +110,11 @@ module WindowRailsGenerators
     self << "myWin.setCloseCallback(function(win){ win.destroy(); return true; });"
   end
   
+  # win:: Name of window
+  # modal:: True if window should be modal
+  # Shows the window centered on the screen. If no window name is provided
+  # it will default to the last created window. Generally this should not
+  # be called, rather #open_window should be used
   def show_window(win, modal)
     s = nil
     unless(win.blank?)
@@ -104,6 +125,10 @@ module WindowRailsGenerators
     self << "#{s}.showCenter(#{modal ? 'true' : 'false'});"
   end
   
+  # win:: Name of window
+  # constraints:: Constaint hash {:left, :right, :top, :bottom}
+  # Sets the constraints on the window. Generally this should not be used,
+  # rather #open_window should be used
   def apply_window_constraints(win, constraints)
     opts = {:left => 0, :right => 0, :top => 0, :bottom => 0}
     opts.merge!(constraints) if constraints.is_a?(Hash)
@@ -198,6 +223,10 @@ module WindowRailsGenerators
     end
   end
   
+  # field_id:: DOM ID of form element to observe
+  # options:: Options
+  # Helper for observing fields that have been dynamically loaed into the DOM. Works like
+  # #observe_field but not as full featured. 
   def observe_dynamically_loaded_field(field_id, options={})
     f = options.delete(:function)
     unless(f)
