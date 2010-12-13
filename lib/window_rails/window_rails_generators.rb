@@ -243,6 +243,8 @@ module WindowRailsGenerators
     f = options.delete(:function)
     unless(f)
       f = "function(event){ new Ajax.Request('#{escape_javascript(@context.url_for(options[:url]).to_s)}', {asynchronous:true, evalScripts:true,parameters:'#{escape_javascript(options[:with].to_s)}='+$('#{escape_javascript(options[:with].to_s)}').getValue()})}"
+    else
+      f = "function(event){ #{f}; }"
     end
     self << "if($('#{escape_javascript(field_id.to_s)}')){ $('#{escape_javascript(field_id.to_s)}').observe('change', #{f}); }"
   end
