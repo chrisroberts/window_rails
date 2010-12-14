@@ -544,8 +544,9 @@ Window.prototype = {
     if (this.constraint && this.useLeft && this.useTop) {
       var width = this.options.parent == document.body ? WindowUtilities.getPageSize().windowWidth : this.options.parent.getDimensions().width;
 
+      // the -10 gives a bit of pad to reduce window from jumping screen
       if (left < this.constraintPad.left)
-        left = this.constraintPad.left;
+        left = this.constraintPad.left - 10;
       if (left + this.width + this.widthE + this.widthW > width - this.constraintPad.right) 
         left = width - this.constraintPad.right - this.width - this.widthE - this.widthW;
     }
