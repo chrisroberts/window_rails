@@ -1,3 +1,9 @@
+== v0.1.1
+* Proper rails loading when included via gem
+* Fix for window jumping when constraints applied
+* Fix for #observe_dynamically_loaded_field when using a function instead of callback
+* Make IFrame usage optional
+
 == v0.1.0
 * Lots of cleanup
 * Better builders available
