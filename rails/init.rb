@@ -1,1 +1,1 @@
-require 'window_rails'
+require File.join(File.dirname(__FILE__), '..', 'init.rb')
