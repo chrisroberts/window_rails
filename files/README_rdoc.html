@@ -31,7 +31,7 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>Thu Nov 18 08:22:17 -0800 2010</span>
+          <span class='datetime'>Mon Jan 24 10:47:09 -0800 2011</span>
         </div>
       </div>
       <div id='content'>
@@ -48,11 +48,21 @@
             <p>
             After install, add these in the head of your application.html.erb file:
             </p>
-            <pre>&lt;%= javascript_include_tag 'window_rails/window' %&gt;&#x000A;&lt;%= stylesheet_link_tag *%w(/themes/alphacube /themes/default themes/alert) %&gt;</pre>
+            <pre>&lt;%= javascript_include_tag 'window_rails/window' %&gt;&#x000A;&lt;%= stylesheet_link_tag *%w(/themes/alphacube /themes/default /themes/alert) %&gt;</pre>
             <p>
             Alphacube is the default theme used by window_rails. Be sure to add the css
             link if you plan on using other themes.
             </p>
+            <h3>Gem based installs</h3>
+            <p>
+            Gem based installs (bundler) will need to run the install task. For rails
+            versions < 3 the task must be added to the Rakefile:
+            </p>
+            <pre>require 'window_rails/tasks'</pre>
+            <p>
+            Then run the install:
+            </p>
+            <pre>rake window_rails:install</pre>
             <h3>Basic examples to get you started</h3>
             <h4>Linking to a window</h4>
             <pre>&lt;%= link_to_window('Link', :url =&gt; {:controller =&gt; :my_controller, :action =&gt; :my_action}, :modal =&gt; true, :className =&gt; 'alphacube', :window =&gt; 'some_name') %&gt;</pre>

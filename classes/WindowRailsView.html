@@ -58,23 +58,24 @@
                   <tr><td valign="top">name:</td><td>Name of the link
                   
                   </td></tr>
-                  <tr><td valign="top">options:</td><td>Hash of optional values. These options are simply passed on to the
-                  activate_window method
+                  <tr><td valign="top">options:</td><td>Hash of options values.
                   
                   </td></tr>
                   </table>
                   <p>
-                  Creates a link whose contents will be loaded into a window. Currently
-                  loaded content is within an IFrame, which means that links within the
-                  window will not have the ability to communicate with the DOM of the page
-                  around it. (This means you cannot close the window from a link within it)
+                  Creates a link to a window. Content is defined by a url in the options hash
+                  using :url or :iframe. If :url is used, the content is loaded into the
+                  window within the page. If :iframe is used the content is loaded into the
+                  window within an IFrame on the page. Generally, if you are calling a method
+                  that simply renders out a partial, you want to use :url. If you are calling
+                  something that returns an entire page, :iframe will likely be the ticket.
                   </p>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('M000007-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000007-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_view.rb, line 8</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">link_to_window</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>={})&#x000A;    <span class="ruby-identifier">link_to_remote</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">:url</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-identifier">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:window_rails</span>, <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:open_window</span>, <span class="ruby-identifier">:window_url</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">url_for</span>(<span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:url</span>)), <span class="ruby-identifier">:window_options</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>})&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000007-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_view.rb, line 10</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">link_to_window</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>={})&#x000A;    <span class="ruby-identifier">link_to_remote</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">:url</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-identifier">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:window_rails</span>, <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:open_window</span>, <span class="ruby-identifier">:window_url</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">url_for</span>(<span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:url</span>)), <span class="ruby-identifier">:iframe_url</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">url_for</span>(<span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:iframe</span>)), <span class="ruby-identifier">:window_options</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>})&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>
