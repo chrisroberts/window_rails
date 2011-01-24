@@ -37,7 +37,7 @@ module WindowRailsGenerators
     self << "Dialog.setInfoMessage('#{escape_javascript(msg)}');"
   end
   
-  # content:: Updated content
+  # key:: Key of updated contents
   # options:: Hash of options
   #   * window -> Name of the window to update (defaults to last window)
   #   * error -> Show error if window is not found (defaults false)
@@ -45,13 +45,10 @@ module WindowRailsGenerators
   # be placed into the window. If it is a Hash, it will be fed to render and the
   # result will be placed in the window (basically an easy way to integrate partials:
   # page.update_window(:partial => 'my_parital'))
-  def update_window(content, options={})
+  def update_window(key, options={})
     win = options.delete(:window)
     error = options.delete(:error)
-    if(content.is_a?(Hash))
-      content = render(content)
-    end
-    self << check_for_window(win, error){ update_window_contents(content, win) }
+    self << check_for_window(win, error){ update_window_contents(key, win) }
   end
   
   # name:: Name of the window
@@ -76,15 +73,15 @@ module WindowRailsGenerators
     self << "}"
   end
   
-  # content:: String content
+  # key:: Content key location
   # win:: Name of window
   # Updates the contents of the window. If no window name is provided, the topmost window
   # will be updated
-  def update_window_contents(content, win=nil)
+  def update_window_contents(key, win=nil)
     unless(win.blank?)
-      self << "Windows.getWindowByName('#{escape_javascript(win)}').setHTMLContent('#{escape_javascript(content)}');"
+      self << "Windows.getWindowByName('#{escape_javascript(win)}').setHTMLContent(window_rails_contents.get('#{key}'));"
     else
-      self << "Windows.windows.values().last().setHTMLContent('#{escape_javascript(content)}');"
+      self << "Windows.windows.values().last().setHTMLContent(window_rails_contents.get('#{key}'));"
     end
   end
 
@@ -98,19 +95,15 @@ module WindowRailsGenerators
     end
   end
 
-  # content:: String content
+  # key:: Content key location
   # win:: Name of window
   # options:: Options to be passed onto window
   # Creates a new window. Generally this should not be called,
   # rather #open_window should be used
-  def create_window(content, win, options)
+  def create_window(key, win, options)
     self << "var myWin = new Window({#{options.map{|k,v|"#{escape_javascript(k.to_s)}:'#{escape_javascript(v.to_s)}'"}.join(', ')}});"
     self << "Windows.registerByName('#{escape_javascript(win)}', myWin);" unless win.blank?
-    if(content.is_a?(Hash) && content[:url])
-      self << "myWin.setAjaxContent('#{escape_javascript(content[:url])}');"
-    elsif(!content.blank?)
-      self << "myWin.setHTMLContent('#{escape_javascript(content.to_s)}');"
-    end
+    self << "myWin.setHTMLContent(window_rails_contents.get('#{key}'));"
     self << "myWin.setCloseCallback(function(win){ win.destroy(); return true; });"
   end
   
@@ -180,26 +173,35 @@ module WindowRailsGenerators
     end
     options[:width] ||= 300
     options[:height] ||= 200
-    output = []
+    key = store_content(content)
     if(no_update)
-      create_window(content, win, options)
+      create_window(key, win, options)
       unless(constraints == false)
         apply_window_constraints(win, constraints)
       end
       show_window(win, modal)
     else
       check_for_window(win, false) do
-        update_window_contents(content, win)
+        update_window_contents(key, win)
         focus_window(win)
       end
       else_block do
-        create_window(content, win, options)
+        create_window(key, win, options)
         unless(constraints == false)
           apply_window_constraints(win, constraints)
         end
         show_window(win, modal)
       end
     end
+  end
+
+  def store_content(content)
+    self << "if(typeof(window_rails_contents) == 'undefined'){ var window_rails_contents = new Hash(); }"
+    key = rand.to_s
+    key.slice!(0,2)
+    c = content.is_a?(Hash) ? render(content) : content.to_s
+    self << "window_rails_contents.set('#{key}', '#{escape_javascript(c)}')"
+    key
   end
   
   # options:: Hash of options
