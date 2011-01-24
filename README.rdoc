@@ -13,6 +13,17 @@ After install, add these in the head of your application.html.erb file:
   
 Alphacube is the default theme used by window_rails. Be sure to add the css link if you plan on using other themes.
 
+=== Gem based installs
+
+Gem based installs (bundler) will need to run the install task. For rails versions < 3 the task
+must be added to the Rakefile:
+
+  require 'window_rails/tasks'
+
+Then run the install:
+
+  rake window_rails:install
+
 === Basic examples to get you started
 
 ==== Linking to a window

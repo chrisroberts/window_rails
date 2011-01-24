@@ -1,3 +1,7 @@
+== v0.1.2
+* Add rake task for install
+* Pull window content from reference to prevent writing content multiple times
+
 == v0.1.1
 * Proper rails loading when included via gem
 * Fix for window jumping when constraints applied
