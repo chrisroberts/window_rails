@@ -1,3 +1,6 @@
+== v0.1.3
+* Rails init inclusion within gem package
+
 == v0.1.2
 * Add rake task for install
 * Pull window content from reference to prevent writing content multiple times
