@@ -37,7 +37,7 @@ module WindowRailsGenerators
     self << "Dialog.setInfoMessage('#{escape_javascript(msg)}');"
   end
   
-  # key:: Key of updated contents
+  # content:: content
   # options:: Hash of options
   #   * window -> Name of the window to update (defaults to last window)
   #   * error -> Show error if window is not found (defaults false)
@@ -45,9 +45,10 @@ module WindowRailsGenerators
   # be placed into the window. If it is a Hash, it will be fed to render and the
   # result will be placed in the window (basically an easy way to integrate partials:
   # page.update_window(:partial => 'my_parital'))
-  def update_window(key, options={})
+  def update_window(content, options={})
     win = options.delete(:window)
     error = options.delete(:error)
+    key = store_content(content)
     self << check_for_window(win, error){ update_window_contents(key, win) }
   end
   
@@ -196,10 +197,10 @@ module WindowRailsGenerators
   end
 
   def store_content(content)
-    self << "if(typeof(window_rails_contents) == 'undefined'){ var window_rails_contents = new Hash(); }"
     key = rand.to_s
     key.slice!(0,2)
     c = content.is_a?(Hash) ? render(content) : content.to_s
+    self << "if(typeof(window_rails_contents) == 'undefined'){ var window_rails_contents = new Hash(); }"
     self << "window_rails_contents.set('#{key}', '#{escape_javascript(c)}')"
     key
   end
