@@ -56,7 +56,7 @@ module WindowRailsGenerators
   # error:: Will throw an alert if window is not found
   # Checks for a window of the given name. If a block is provided, it will be executed
   # if the window is found
-  def check_for_window(name, error)
+  def check_for_window(name, error=true)
     if(name.blank?)
       self <<  "if(Windows.windows.values().size() > 0){"
     else
@@ -93,6 +93,30 @@ module WindowRailsGenerators
       self << "Windows.focus(Windows.getWindowByName('#{escape_javascript(win)}').getId());"
     else
       self << "Windows.focus(Windows.windows.values().last().getId());"
+    end
+  end
+
+  # win:: Name of window
+  # Will maximize the window. If no name provided, topmost window will be maximized
+  def maximize_window(win=nil)
+    check_for_window(name) do
+      if(name)
+        self << "Windows.getWindowByName('#{escape_javascript(win)}').maximize();"
+      else
+        self << "Windows.windows.values().last().maximize();"
+      end
+    end
+  end
+
+  # win:: Name of window
+  # Will minimize the window. If no name provided, topmost window will be minimized
+  def minimize_window(win)
+    check_for_window(name) do
+      if(name)
+        self << "Windows.getWindowByName('#{escape_javascript(win)}').minimize();"
+      else
+        self << "Windows.windows.values().last().minimize();"
+      end
     end
   end
 
