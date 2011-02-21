@@ -193,7 +193,7 @@ module WindowRailsGenerators
         options[:url] = @context.url_for(content[:url])
         content = nil
       else
-        content = render(content)
+        content = @context.render(content)
       end
     end
     options[:width] ||= 300
@@ -223,7 +223,7 @@ module WindowRailsGenerators
   def store_content(content)
     key = rand.to_s
     key.slice!(0,2)
-    c = content.is_a?(Hash) ? render(content) : content.to_s
+    c = content.is_a?(Hash) ? @context.render(content) : content.to_s
     self << "if(typeof(window_rails_contents) == 'undefined'){ var window_rails_contents = new Hash(); }"
     self << "window_rails_contents.set('#{key}', '#{escape_javascript(c)}')"
     key
