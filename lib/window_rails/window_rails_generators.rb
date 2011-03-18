@@ -8,7 +8,24 @@ module WindowRailsGenerators
   # Opens an alert window
   def open_alert_window(msg, options={})
     options[:width] ||= 200
-    self << "Dialog.alert('#{escape_javascript(msg)}', {#{options.map{|k,v|"#{escape_javascript(k.to_s)}:'#{escape_javascript(v.to_s)}'"}.join(',')}});"
+    options[:modal] = true
+    options[:title] ||= 'Alert!'
+    options[:buttons] ||= {'OK' => 'function(){ jQuery(this).dialog("close");}'}
+    store_content(msg, 'alert_modal');
+    self << "
+      if(jQuery('#alert_modal').size() == 0){
+        jQuery('<div id=\"alert_modal\"></div>')
+          .html(window_rails_contents.get('alert_modal'))
+            .dialog(#{format_type_to_js(options)});
+      } else {
+        jQuery('#alert_modal')
+          .html(window_rails_contents.get('alert_modal'))
+            .dialog(#{format_type_to_js(options)});
+      }"
+  end
+
+  def close_alert_window
+    self << 'jQuery("#alert_modal").dialog("close");'
   end
 
   # msg:: Confirmation message
@@ -16,7 +33,20 @@ module WindowRailsGenerators
   # Opens a confirmation window
   def open_confirm_window(msg, options={})
     options[:width] ||= 200
-    self << "Dialog.confirm('#{escape_javascript(msg)}', {#{options.map{|k,v|"#{escape_javascript(k.to_s)}:'#{escape_javascript(v.to_s)}'"}.join(',')}});"
+    options[:modal] = true
+    options[:title] ||= 'Confirm'
+    options[:buttons] ||= {'OK' => 'function(){ jQuery(this).dialog("close");}'}
+    store_content(msg, 'confirmation_modal')
+    self << "
+      if(jQuery('#confirmation_modal').size() == 0){
+        jQuery('<div id=\"confirmation_modal\"></div>')
+          .html(window_rails_contents.get('confirmation_modal'))
+            .dialog(#{format_type_to_js(options)});
+      } else {
+        jQuery('#confirmation_modal')
+          .html(window_rails_contents.get('confirmation_modal'))
+            .dialog(#{format_type_to_js(options)});
+      }"
   end
   
   # msg:: Information message
@@ -24,19 +54,38 @@ module WindowRailsGenerators
   # Open an information window
   def open_info_window(msg, options={})
     options[:width] ||= 200
-    self << "Dialog.info('#{escape_javascript(msg)}', {#{options.map{|k,v|"#{escape_javascript(k.to_s)}:'#{escape_javascript(v.to_s)}'"}.join(',')}});"
+    options[:modal] = true
+    options[:title] ||= 'Information'
+    options[:close_on_escape] = false
+    store_content(msg, 'information_modal')
+    self << "
+      if(jQuery('#information_modal').size() == 0){
+        jQuery('<div id=\"information_modal\"></div>')
+          .html(window_rails_contents.get('information_modal'))
+            .dialog(#{format_type_to_js(options)});
+      } else {
+        jQuery('#information_modal')
+          .html(window_rails_contents.get('information_modal'))
+            .dialog(#{format_type_to_js(options)});
+      }"
   end
   
   # Close an information window
   def close_info_window
-    self << "Dialog.closeInfo();"
+    self << 'jQuery("#information_modal").dialog("close");'
   end
   
   # Update the contents of an information window
   def update_info_window(msg)
-    self << "Dialog.setInfoMessage('#{escape_javascript(msg)}');"
+    self << 'jQuery("#information_modal").html(#{format_type_to_js(msg)});'
   end
-  
+
+  def window(dom_id)
+    dom_id = "##{dom_id.to_s}" unless dom_id.to_s.starts_with?('#')
+    self << "jQuery.window.getWindow(#{format_type_to_js(dom_id)})"
+    self
+  end
+
   # content:: content
   # options:: Hash of options
   #   * window -> Name of the window to update (defaults to last window)
@@ -57,10 +106,11 @@ module WindowRailsGenerators
   # Checks for a window of the given name. If a block is provided, it will be executed
   # if the window is found
   def check_for_window(name, error=true)
+    name = "##{name}" unless name.starts_with?('#')
     if(name.blank?)
-      self <<  "if(Windows.windows.values().size() > 0){"
+      self <<  "if(jQuery.window.getAll().size() > 0){"
     else
-      self << "if(Windows.existsByName('#{escape_javascript(name)}')){"
+      self << "if(jQuery('#{name}').size() > 0{"
     end
     yield if block_given?
     self << "}"
@@ -80,9 +130,9 @@ module WindowRailsGenerators
   # will be updated
   def update_window_contents(key, win=nil)
     unless(win.blank?)
-      self << "Windows.getWindowByName('#{escape_javascript(win)}').setHTMLContent(window_rails_contents.get('#{key}'));"
+      self << "jQuery.window.getWindow(#{format_type_to_js(key)}).setContent(window_rails_contents.get('#{key}'));"
     else
-      self << "Windows.windows.values().last().setHTMLContent(window_rails_contents.get('#{key}'));"
+      self << "jQuery.window.getAll.last().setContent(window_rails_contents.get('#{key}'));"
     end
   end
 
@@ -220,9 +270,11 @@ module WindowRailsGenerators
     end
   end
 
-  def store_content(content)
-    key = rand.to_s
-    key.slice!(0,2)
+  def store_content(content, key=nil)
+    unless(key)
+      key = rand.to_s
+      key.slice!(0,2)
+    end
     c = content.is_a?(Hash) ? @context.render(content) : content.to_s
     self << "if(typeof(window_rails_contents) == 'undefined'){ var window_rails_contents = new Hash(); }"
     self << "window_rails_contents.set('#{key}', '#{escape_javascript(c)}')"
@@ -276,4 +328,27 @@ module WindowRailsGenerators
     self << "if($('#{escape_javascript(field_id.to_s)}')){ $('#{escape_javascript(field_id.to_s)}').observe('change', #{f}); }"
   end
   
+  # arg:: Object
+  # Does a simple transition on types from Ruby to Javascript.
+  def format_type_to_js(arg)
+    case arg
+      when Array
+        "[#{arg.map{|value| format_type_to_js(value)}.join(',')}]"
+      when Hash
+        "{#{arg.map{ |key, value|
+          k = key.is_a?(Symbol) ? key.to_s.camelize.sub(/^./, key.to_s[0,1].downcase) : key.to_s
+          "#{k}:#{format_type_to_js(value)}"
+        }.join(',')}}"
+      when Fixnum
+        arg.to_s
+      when TrueClass
+        arg.to_s
+      when FalseClass
+        arg.to_s
+      when NilClass
+        'null'
+      else
+        arg.to_s =~ %r{^\s*function\s*\(} ? arg.to_s : "'#{escape_javascript(arg.to_s)}'"
+    end
+  end
 end
