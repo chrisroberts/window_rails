@@ -12,3 +12,4 @@ module WindowRailsView
   end
   
 end
+ActionView::Base.send :include, WindowRailsView
