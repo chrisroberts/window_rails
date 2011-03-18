@@ -61,7 +61,7 @@ end
 def install_items(item)
   FileUtils.mkdir_p(File.join(Rails.root, 'public', 'window_rails', item))
   FileUtils.cp_r(
-    File.join(File.dirname(__FILE__), 'files', item, File::SEPARATOR, '.'), 
+    File.join(File.dirname(__FILE__), '..', '..', 'files', item, File::SEPARATOR, '.'), 
     File.join(Rails.root, 'public', 'window_rails', item)
   )
   puts "#{item.titleize} files installed."
