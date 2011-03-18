@@ -15,11 +15,11 @@ module WindowRailsGenerators
     self << "
       if(jQuery('#alert_modal').size() == 0){
         jQuery('<div id=\"alert_modal\"></div>')
-          .html(window_rails_contents.get('alert_modal'))
+          .html(window_rails_contents['alert_modal'])
             .dialog(#{format_type_to_js(options)});
       } else {
         jQuery('#alert_modal')
-          .html(window_rails_contents.get('alert_modal'))
+          .html(window_rails_contents['alert_modal'])
             .dialog(#{format_type_to_js(options)});
       }"
   end
@@ -40,11 +40,11 @@ module WindowRailsGenerators
     self << "
       if(jQuery('#confirmation_modal').size() == 0){
         jQuery('<div id=\"confirmation_modal\"></div>')
-          .html(window_rails_contents.get('confirmation_modal'))
+          .html(window_rails_contents['confirmation_modal'])
             .dialog(#{format_type_to_js(options)});
       } else {
         jQuery('#confirmation_modal')
-          .html(window_rails_contents.get('confirmation_modal'))
+          .html(window_rails_contents['confirmation_modal'])
             .dialog(#{format_type_to_js(options)});
       }"
   end
@@ -61,11 +61,11 @@ module WindowRailsGenerators
     self << "
       if(jQuery('#information_modal').size() == 0){
         jQuery('<div id=\"information_modal\"></div>')
-          .html(window_rails_contents.get('information_modal'))
+          .html(window_rails_contents['information_modal'])
             .dialog(#{format_type_to_js(options)});
       } else {
         jQuery('#information_modal')
-          .html(window_rails_contents.get('information_modal'))
+          .html(window_rails_contents['information_modal'])
             .dialog(#{format_type_to_js(options)});
       }"
   end
@@ -80,9 +80,22 @@ module WindowRailsGenerators
     self << 'jQuery("#information_modal").html(#{format_type_to_js(msg)});'
   end
 
+  def window_setup
+    self << '
+      if(typeof(window_rails_mappings) == "undefined"){
+        var window_rails_mappings = {};
+      }'
+  end
+
   def window(dom_id)
-    dom_id = "##{dom_id.to_s}" unless dom_id.to_s.starts_with?('#')
-    self << "jQuery.window.getWindow(#{format_type_to_js(dom_id)})"
+    window_setup
+    unless(dom_id.blank?)
+      dom_id = dom_id.to_s.dup
+      dom_id.slice!(0) if dom_id.starts_with?('#')
+      self << "jQuery.window.getWindow(window_rails_mappings[#{format_type_to_js(dom_id.to_s)}])"
+    else
+      self << 'jQuery.window.getAll().shift()'
+    end
     self
   end
 
@@ -106,11 +119,12 @@ module WindowRailsGenerators
   # Checks for a window of the given name. If a block is provided, it will be executed
   # if the window is found
   def check_for_window(name, error=true)
-    name = "##{name}" unless name.starts_with?('#')
+    name = name.to_s.dup
+    name.slice!(0) if name.starts_with?('#')
     if(name.blank?)
-      self <<  "if(jQuery.window.getAll().size() > 0){"
+      self <<  "if(jQuery.window.getAll().length > 0){"
     else
-      self << "if(jQuery('#{name}').size() > 0{"
+      self << "if(jQuery.window.getWindow(#{format_type_to_js(name.to_s)})){"
     end
     yield if block_given?
     self << "}"
@@ -129,45 +143,25 @@ module WindowRailsGenerators
   # Updates the contents of the window. If no window name is provided, the topmost window
   # will be updated
   def update_window_contents(key, win=nil)
-    unless(win.blank?)
-      self << "jQuery.window.getWindow(#{format_type_to_js(key)}).setContent(window_rails_contents.get('#{key}'));"
-    else
-      self << "jQuery.window.getAll.last().setContent(window_rails_contents.get('#{key}'));"
-    end
+    window(win) << ".setContent(window_rails_contents[#{format_type_to_js(key.to_s)}]);"
   end
 
   # win:: Name of window
   # Will focus the window. If no name provided, topmost window will be focused
   def focus_window(win=nil)
-    unless(win.blank?)
-      self << "Windows.focus(Windows.getWindowByName('#{escape_javascript(win)}').getId());"
-    else
-      self << "Windows.focus(Windows.windows.values().last().getId());"
-    end
+    window(win) << ".select();"
   end
 
   # win:: Name of window
   # Will maximize the window. If no name provided, topmost window will be maximized
   def maximize_window(win=nil)
-    check_for_window(name) do
-      if(name)
-        self << "Windows.getWindowByName('#{escape_javascript(win)}').maximize();"
-      else
-        self << "Windows.windows.values().last().maximize();"
-      end
-    end
+    window(win) << ".maximize();"
   end
 
   # win:: Name of window
   # Will minimize the window. If no name provided, topmost window will be minimized
   def minimize_window(win)
-    check_for_window(name) do
-      if(name)
-        self << "Windows.getWindowByName('#{escape_javascript(win)}').minimize();"
-      else
-        self << "Windows.windows.values().last().minimize();"
-      end
-    end
+    window(win) << ".minimize();"
   end
 
   # key:: Content key location
@@ -176,10 +170,12 @@ module WindowRailsGenerators
   # Creates a new window. Generally this should not be called,
   # rather #open_window should be used
   def create_window(key, win, options)
-    self << "var myWin = new Window({#{options.map{|k,v|"#{escape_javascript(k.to_s)}:'#{escape_javascript(v.to_s)}'"}.join(', ')}});"
-    self << "Windows.registerByName('#{escape_javascript(win)}', myWin);" unless win.blank?
-    self << "myWin.setHTMLContent(window_rails_contents.get('#{key}'));"
-    self << "myWin.setCloseCallback(function(win){ win.destroy(); return true; });"
+    window_setup
+    self << "
+      win = jQuery.window(#{format_type_to_js(options)});
+      window_rails_mappings[#{format_type_to_js(win.to_s)}] = win.getWindowId();
+      win.setContent(window_rails_contents[#{format_type_to_js(key.to_s)}]);
+    "
   end
   
   # win:: Name of window
@@ -187,21 +183,18 @@ module WindowRailsGenerators
   # Shows the window centered on the screen. If no window name is provided
   # it will default to the last created window. Generally this should not
   # be called, rather #open_window should be used
+  # NOTE: No modal mode currently
   def show_window(win, modal)
-    s = nil
-    unless(win.blank?)
-      s = "Windows.getWindowByName('#{escape_javascript(win)}')"
-    else
-      s = 'Windows.windows.values().last()'
-    end
-    self << "#{s}.showCenter(#{modal ? 'true' : 'false'});"
+    window(win) << ".show();"
   end
   
   # win:: Name of window
   # constraints:: Constaint hash {:left, :right, :top, :bottom}
   # Sets the constraints on the window. Generally this should not be used,
   # rather #open_window should be used
+  # NOTE: Useless for now. Just constrains to the window
   def apply_window_constraints(win, constraints)
+  return
     opts = {:left => 0, :right => 0, :top => 0, :bottom => 0}
     opts.merge!(constraints) if constraints.is_a?(Hash)
     s = nil
@@ -237,7 +230,7 @@ module WindowRailsGenerators
     win = options.delete(:window)
     constraints = options.delete(:constraints)
     no_update = options.delete(:no_update)
-    options[:className] = 'alphacube' unless options[:className]
+    options[:check_boundary] = true
     if(content.is_a?(Hash))
       if(content[:url])
         options[:url] = @context.url_for(content[:url])
@@ -276,8 +269,8 @@ module WindowRailsGenerators
       key.slice!(0,2)
     end
     c = content.is_a?(Hash) ? @context.render(content) : content.to_s
-    self << "if(typeof(window_rails_contents) == 'undefined'){ var window_rails_contents = new Hash(); }"
-    self << "window_rails_contents.set('#{key}', '#{escape_javascript(c)}')"
+    self << "if(typeof(window_rails_contents) == 'undefined'){ var window_rails_contents = {}; }"
+    self << "window_rails_contents[#{format_type_to_js(key.to_s)}] = #{format_type_to_js(c)}"
     key
   end
   
@@ -285,24 +278,19 @@ module WindowRailsGenerators
   #   * :window -> name of window to close
   # Close the window of the provided name or the last opened window
   def close_window(options = {})
-    win = options.is_a?(Hash) ? options.delete(:window) : options.to_s
-    self << "var myWin = null;"
-    unless(win.blank?)
-      self << "myWin = Windows.getWindowByName('#{escape_javascript(win)}');"
-    else
-      self << "if(Windows.windows.values().last()){ myWin = Windows.windows.values().last(); }"
-    end
-    self << "if(myWin){ myWin.close(); }"
+    window(options[:window]) << '.close();'
   end
   
   # Close all open windows
   def close_all_windows
-    self << "Windows.closeAll();"
+    self << 'jQuery.window.closeAll();'
   end
   
   # args:: List of window names to refresh (All will be refreshed if :all is included)
   # Refresh window contents
+  # NOTE: Currently does nothing
   def refresh_window(*args)
+  return
     self << "var myWin = null;"
     if(args.include?(:all))
       self << "Windows.windows.values().each(function(win){ win.refresh(); });"
@@ -318,7 +306,9 @@ module WindowRailsGenerators
   # options:: Options
   # Helper for observing fields that have been dynamically loaed into the DOM. Works like
   # #observe_field but not as full featured. 
+  # NOTE: Currently does nothing
   def observe_dynamically_loaded_field(field_id, options={})
+  return
     f = options.delete(:function)
     unless(f)
       f = "function(event){ new Ajax.Request('#{escape_javascript(@context.url_for(options[:url]).to_s)}', {asynchronous:true, evalScripts:true,parameters:'#{escape_javascript(options[:with].to_s)}='+$('#{escape_javascript(options[:with].to_s)}').getValue()})}"
@@ -352,3 +342,4 @@ module WindowRailsGenerators
     end
   end
 end
+ActionView::Helpers::PrototypeHelper::JavaScriptGenerator::GeneratorMethods.send :include, WindowRailsGenerators
