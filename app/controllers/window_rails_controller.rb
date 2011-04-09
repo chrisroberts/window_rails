@@ -26,8 +26,15 @@ class WindowRailsController < ApplicationController
         redirect_to '/'
       end
       format.js do
+        content = nil
+        if(params[:window_url].blank?)
+          content = {:url => params[:iframe_url]}
+        else
+          raise 'URL to content is not currently supported'
+          content = render_to_string(params[:window_url])
+        end
         render :update do |page|
-          page.open_window({:url => params[:window_url]}, params[:window_options] || {})
+          page.open_window(content, params[:window_options] || {})
         end
       end
     end
