@@ -226,6 +226,7 @@ module WindowRailsGenerators
   #   be isolated from the current page, but this isolation means it cannot communicate with other windows on the page (including
   #   its own).
   def open_window(content, options={})
+    options = {} unless options
     modal = options.delete(:modal)
     win = options.delete(:window)
     constraints = options.delete(:constraints)

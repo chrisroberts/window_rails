@@ -1,4 +1,4 @@
-module RabidCore
+module WindowRails
   class Engine < Rails::Engine
     
     rake_tasks do

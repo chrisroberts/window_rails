@@ -1,4 +1,4 @@
-class WindowRailsController < ActionController::Base
+class WindowRailsController < ApplicationController
   
   # Make sure we kick any thing out that is making a request other
   # than openning a new window
@@ -27,7 +27,7 @@ class WindowRailsController < ActionController::Base
       end
       format.js do
         render :update do |page|
-          page.open_window({:url => params[:window_url]}, params[:window_options])
+          page.open_window({:url => params[:window_url]}, params[:window_options] || {})
         end
       end
     end
