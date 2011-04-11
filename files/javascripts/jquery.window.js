@@ -369,6 +369,7 @@ $.Window = (function()  {
 			title: "",                    // [string:""] the title text of window
 			url: "",                      // [string:""] the target url of iframe ready to load.
 			content: "",                  // [html string, jquery object, element:""] this attribute only works when url is null. when passing a jquery object or a element, it will clone the original one to append.
+      content_url: "",              // [string:""] url of page to load within content (directly loaded into DOM, not an IFRAME)
 			footerContent: "",            // [html string, jquery object, element:""] same as content attribute, but it's put on footer panel.
 			containerClass: "",           // [string:""] container extra class
 			headerClass: "",              // [string:""] header extra class
@@ -597,7 +598,28 @@ $.Window = (function()  {
 						options.onIframeEnd(_this, options.url);
 					}
 				});
-			} else {
+			} else if( options.content_url != null && $.trim(options.content_url) != "" ) { 
+				// show loading image
+				container.append("<div class='frame_loading'>Loading...</div>");
+				var loading = container.children(".frame_loading");
+				loading.css("marginLeft",	'-' + (loading.outerWidth() / 2) - 20 + 'px');
+				loading.click(function() {
+					loading.remove();
+				});
+
+				container.append("<div class='window_frame ui-widget-content no-draggable no-resizable "+options.frameClass+"' style='width:100%; height:"+frameHeight+"px;'></div>");
+				frame = container.children(".window_frame");
+        $.get(options.content_url, function(data){
+          if(data != null){
+					  loading.remove();
+            setContent(data);
+            frame.children().show();
+          }
+        });
+				frame.css({
+					overflow: options.scrollable? "auto":"hidden"
+				});
+      } else {
 				container.append("<div class='window_frame ui-widget-content no-draggable no-resizable "+options.frameClass+"' style='width:100%; height:"+frameHeight+"px;'></div>");
 				frame = container.children(".window_frame");
 				if( options.content != null ) {

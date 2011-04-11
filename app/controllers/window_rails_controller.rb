@@ -30,8 +30,7 @@ class WindowRailsController < ApplicationController
         if(params[:window_url].blank?)
           content = {:url => params[:iframe_url]}
         else
-          raise 'URL to content is not currently supported'
-          content = render_to_string(params[:window_url])
+          content = {:content_url => params[:window_url]}
         end
         render :update do |page|
           page.open_window(content, params[:window_options] || {})

@@ -236,6 +236,9 @@ module WindowRailsGenerators
       if(content[:url])
         options[:url] = @context.url_for(content[:url])
         content = nil
+      elsif(content[:content_url])
+        options[:content_url] = @context.url_for(content[:content_url])
+        content = nil
       else
         content = @context.render(content)
       end
