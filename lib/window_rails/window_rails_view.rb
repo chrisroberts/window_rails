@@ -7,7 +7,7 @@ module WindowRailsView
   # the content is loaded into the window within an IFrame on the page. Generally, if you are calling
   # a method that simply renders out a partial, you want to use :url. If you are calling something
   # that returns an entire page, :iframe will likely be the ticket.
-  def link_to_window(name, options={})
+  def link_to_window(name, options={}, html_opts={})
     frame_url = options.has_key?(:iframe) ? url_for(options.delete(:iframe)) : nil
     window_url = options.has_key?(:url) ? url_for(options.delete(:url)) : nil
     link_to(
@@ -16,7 +16,7 @@ module WindowRailsView
         :iframe_url => frame_url,
         :window_options => options
       ),
-      :remote => true
+      {:remote => true}.merge(html_opts)
     )
   end
   
