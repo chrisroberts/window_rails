@@ -245,6 +245,11 @@ module WindowRailsGenerators
     end
     options[:width] ||= 300
     options[:height] ||= 200
+    options[:container_class] ||= 'window-rails-container'
+    options[:header_class] ||= 'window-rails-header'
+    options[:frame_class] ||= 'window-rails-frame'
+    options[:footer_class] ||= 'window-rails-footer'
+    options[:selected_header_class] ||= 'window-rails-selected-header'
     key = store_content(content)
     if(no_update)
       create_window(key, win, options)
