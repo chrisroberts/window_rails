@@ -124,7 +124,8 @@ module WindowRailsGenerators
     if(name.blank?)
       self <<  "if(jQuery.window.getAll().length > 0){"
     else
-      self << "if(jQuery.window.getWindow(#{format_type_to_js(name.to_s)})){"
+      window_setup # TODO: This is a dup. we need a generalized setup method
+      self << "if(jQuery.window.getWindow(window_rails_mappings[#{format_type_to_js(name.to_s)}])){"
     end
     yield if block_given?
     self << "}"
@@ -214,7 +215,7 @@ module WindowRailsGenerators
   #   * :iframe -> URL to load within an IFrame in the window
   #   * :width -> Width of the window
   #   * :height -> Height of the window
-  #   * :className -> Theme name for the window
+  #    :className -> Theme name for the window
   #   * :no_update -> Set to true to force creation of a new window even if window of same name already exists (defaults to false)
   # Creates a new window and displays it at the center of the viewport. Content can be provided as
   # a string, or as a Hash. If :url is defined, the window will be loaded with the contents of the request. If not, the hash
