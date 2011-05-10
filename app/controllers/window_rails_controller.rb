@@ -26,14 +26,18 @@ class WindowRailsController < ApplicationController
         redirect_to '/'
       end
       format.js do
+        opts = {}
         content = nil
         if(params[:window_url].blank?)
           content = {:url => params[:iframe_url]}
         else
           content = {:content_url => params[:window_url]}
         end
+        params['window_options'].keys.each do |key|
+          opts[key.to_sym] = params['window_options'][key]
+        end
         render :update do |page|
-          page.open_window(content, params[:window_options] || {})
+          page.open_window(content, opts || {})
         end
       end
     end
