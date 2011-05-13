@@ -128,7 +128,11 @@ module WindowRailsGenerators
   def create_window(key, win, options)
     self << "var myWin = new Window({#{options.map{|k,v|"#{escape_javascript(k.to_s)}:'#{escape_javascript(v.to_s)}'"}.join(', ')}});"
     self << "Windows.registerByName('#{escape_javascript(win)}', myWin);" unless win.blank?
-    self << "myWin.setHTMLContent(window_rails_contents.get('#{key}'));"
+    if(key.is_a?(Hash))
+      self << "myWin.setAjaxContent('#{escape_javascript(key[:url])}');"
+    else
+      self << "myWin.setHTMLContent(window_rails_contents.get('#{key}'));"
+    end
     self << "myWin.setCloseCallback(function(win){ win.destroy(); return true; });"
   end
   
@@ -190,15 +194,14 @@ module WindowRailsGenerators
     options[:className] = 'alphacube' unless options[:className]
     if(content.is_a?(Hash))
       if(content[:url])
-        options[:url] = @context.url_for(content[:url])
-        content = nil
+        content[:url] = @context.url_for(content[:url])
       else
         content = @context.render(content)
       end
     end
     options[:width] ||= 300
     options[:height] ||= 200
-    key = store_content(content)
+    key = content.is_a?(Hash) ? content : store_content(content)
     if(no_update)
       create_window(key, win, options)
       unless(constraints == false)
