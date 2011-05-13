@@ -304,6 +304,9 @@ Window.prototype = {
     if (! this._onCompleteHandler)
       this._onCompleteHandler = this._setAjaxContent.bind(this);
     options.onComplete = this._onCompleteHandler;
+    if(options.method == null){
+      options.method = 'get';
+    }
 
     new Ajax.Request(url, options);    
     options.onComplete = this.onComplete;
