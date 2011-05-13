@@ -126,6 +126,7 @@ module WindowRailsGenerators
   # Creates a new window. Generally this should not be called,
   # rather #open_window should be used
   def create_window(key, win, options)
+    close_callback = options.delete(:setCloseCallback)
     self << "var myWin = new Window({#{options.map{|k,v|"#{escape_javascript(k.to_s)}:'#{escape_javascript(v.to_s)}'"}.join(', ')}});"
     self << "Windows.registerByName('#{escape_javascript(win)}', myWin);" unless win.blank?
     if(key.is_a?(Hash))
@@ -133,7 +134,10 @@ module WindowRailsGenerators
     else
       self << "myWin.setHTMLContent(window_rails_contents.get('#{key}'));"
     end
-    self << "myWin.setCloseCallback(function(win){ win.destroy(); return true; });"
+    if(close_callback)
+      close_callback = close_callback.scan(/\{(.+)\}[^\}]*$/).try(:first).try(:first)
+    end
+    self << "myWin.setCloseCallback(function(win){ win.destroy(); #{close_callback} return true;});"
   end
   
   # win:: Name of window
@@ -191,6 +195,9 @@ module WindowRailsGenerators
     win = options.delete(:window)
     constraints = options.delete(:constraints)
     no_update = options.delete(:no_update)
+    if(options[:on_close])
+      options[:setCloseCallback] = options.delete(:on_close)
+    end
     options[:className] = 'alphacube' unless options[:className]
     if(content.is_a?(Hash))
       if(content[:url])
