@@ -12,12 +12,10 @@ module WindowRailsView
     options[:iframe] = options.delete(:iframe_url) if options[:iframe_url]
     link_to_remote(
       name, {
-      :url => {
-        :controller => :window_rails,
-        :action => :open_window,
+      :url => open_window_url(
         :window_url => window_url,
         :window_options => options
-      }},
+      )},
       html_opts
     )
   end
