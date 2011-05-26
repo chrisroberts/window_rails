@@ -90,8 +90,10 @@ module WindowRailsGenerators
     @set ||= false
     unless(@set)
       self << '
-        if(typeof(window_rails_windows) == "undefined"){
-          var window_rails_windows = {};
+        if(typeof(window.window_rails_windows) == "undefined") {
+          window.window_rails_windows = {};
+        } if(typeof(window_rails_windows_array) == "undefined") {
+          window.window_rails_windows_array = new Array();
         }
         '
     end
@@ -104,9 +106,9 @@ module WindowRailsGenerators
     unless(dom_id.blank?)
       dom_id = dom_id.to_s.dup
       dom_id.slice!(0) if dom_id.start_with?('#')
-      self << "window_rails_windows['#{dom_id}']"
+      self << "window.window_rails_windows['#{dom_id}']"
     else
-      self << "window_rails_windows.shift()"
+      self << "window.window_rails_windows[window.window_rails_windows_array[0]]"
     end
     self
   end
@@ -136,9 +138,9 @@ module WindowRailsGenerators
     name.slice!(0) if name.start_with?('#')
     window_setup
     if(name.blank?)
-      self << "if(window_rails_windows.length > 0){"
+      self << "if(window.window_rails_windows.length > 0){"
     else
-      self << "if(window_rails_windows['#{name}']){"
+      self << "if(window.window_rails_windows['#{name}']){"
     end
     yield if block_given?
     self << "}"
@@ -158,8 +160,8 @@ module WindowRailsGenerators
   # win:: Name of window
   # Updates the contents of the window. If no window name is provided, the topmost window
   # will be updated
-  def update_window_contents(key, win=nil)
-    window(win) << ".html(window_rails_contents[#{format_type_to_js(key.to_s)}]);"
+  def update_window_contents(key, win, options)
+    window(win) << ".html(window.window_rails_contents[#{format_type_to_js(key.to_s)}]);"
     nil
   end
 
@@ -189,6 +191,17 @@ module WindowRailsGenerators
   # rather #open_window should be used
   def create_window(key, win, options)
     options[:auto_open] ||= false
+    options[:close] = "function(event,ui){ 
+      #{
+        if(options[:close])
+          "callback = #{options[:close]}; callback();"
+        end
+      }
+      jQuery('##{win}').dialog('destroy'); 
+      window.window_rails_windows['#{win}'] = null;
+      window.window_rails_windows_array.splice(window.window_rails_windows_array.indexOf('#{win}'), 1);
+      jQuery('##{win}').remove();
+    }"
     unless(win.is_a?(String))
       win = win.to_s
     end
@@ -197,16 +210,35 @@ module WindowRailsGenerators
     end
     window_setup
     self << "
+      if(jQuery('#window_rails_windows').size() == 0){
+        jQuery('body').append('<div id=\"window_rails_windows\" style=\"visibility:hidden;display:none;\"></div>');
+      }
       if(jQuery('##{win}').size() == 0){
-        window_rails_windows['#{win}'] = jQuery('<div id=\"#{win}\"></div>');
+        jQuery('#window_rails_windows').append('<div id=\"#{win}\"></div>');
       }
-      else{
-        window_rails_windows['#{win}'] = jQuery('##{win}');
-      }
-      window_rails_windows['#{win}']
-        .html(window_rails_contents['#{key}'])
-          .dialog(#{format_type_to_js(options)});
+      window.window_rails_windows['#{win}'] = jQuery('##{win}');
+      window.window_rails_windows_array.push('#{win}');
     "
+    if(key == :url)
+      options[:auto_open] = true
+      self << "
+        jQuery.get(
+          '#{options.delete(:url)}',
+          function(data){
+            window.window_rails_windows['#{win}']
+              .html(data)
+                .dialog(#{format_type_to_js(options)})
+                  .dialog('open');
+          }
+        );
+      "
+    else
+      self << "
+        window.window_rails_windows['#{win}']
+          .html(window.window_rails_contents['#{key}'])
+            .dialog(#{format_type_to_js(options)});
+      "
+    end
     nil
   end
   
@@ -234,7 +266,6 @@ module WindowRailsGenerators
   #   * :iframe -> URL to load within an IFrame in the window
   #   * :width -> Width of the window
   #   * :height -> Height of the window
-  #    :className -> Theme name for the window
   #   * :no_update -> Set to true to force creation of a new window even if window of same name already exists (defaults to false)
   # Creates a new window and displays it at the center of the viewport. Content can be provided as
   # a string, or as a Hash. If :url is defined, the window will be loaded with the contents of the request. If not, the hash
@@ -246,12 +277,17 @@ module WindowRailsGenerators
   #   be isolated from the current page, but this isolation means it cannot communicate with other windows on the page (including
   #   its own).
   def open_window(content, options={})
+    key = nil
     if(options[:iframe])
-      raise "IFrame support is not yet supported"
+      iframe = @context.url_for(options.delete(:iframe))
     end
     if(content.is_a?(Hash))
-      if(content[:url] || content[:content_url])
-        raise 'Ack'
+      if(content[:url])
+        options[:iframe] = @context.url_for(content[:url])
+        content = nil
+      elsif(content[:content_url])
+        options[:url] = @context.url_for(content[:content_url])
+        content = nil
       else
         content = @context.render(content)
       end
@@ -259,14 +295,23 @@ module WindowRailsGenerators
     options[:width] ||= 300
     options[:height] ||= 200
     modal = options[:modal]
-    key = store_content(content)
+    if(options[:on_close])
+      options[:close] = options.delete(:on_close)
+    end
+    if(options[:iframe])
+      key = :iframe
+    elsif(options[:url])
+      key = :url
+    else
+      key = store_content(content)
+    end
     win = options.delete(:window) || "win_#{rand(99999)}"
     if(options.delete(:no_update))
       create_window(key, win, options)
       show_window(win, modal)
     else
       check_for_window(win, false) do
-        update_window_contents(key, win)
+        update_window_contents(key, win, options)
         focus_window(win)
       end
       else_block do
@@ -283,8 +328,8 @@ module WindowRailsGenerators
       key.slice!(0,2)
     end
     c = content.is_a?(Hash) ? @context.render(content) : content.to_s
-    self << "if(typeof(window_rails_contents) == 'undefined'){ var window_rails_contents = {}; }"
-    self << "window_rails_contents[#{format_type_to_js(key.to_s)}] = #{format_type_to_js(c)};"
+    self << "if(typeof(window.window_rails_contents) == 'undefined'){ window.window_rails_contents = {}; }"
+    self << "window.window_rails_contents[#{format_type_to_js(key.to_s)}] = #{format_type_to_js(c)};"
     key
   end
   
@@ -292,12 +337,20 @@ module WindowRailsGenerators
   #   * :window -> name of window to close
   # Close the window of the provided name or the last opened window
   def close_window(options = {})
-    window(options[:window]) << '.close();'
+    window(options[:window]) << '.dialog("close");'
   end
   
   # Close all open windows
   def close_all_windows
-    self << 'jQuery.window.closeAll();'
+    setup_windows
+    self << '
+      jQuery.each(
+        window_rails_windows_array,
+        function(name, win){
+          window.window_rails_windows[win].dialog("close");
+        }
+      );
+    '
   end
   
   # args:: List of window names to refresh (All will be refreshed if :all is included)

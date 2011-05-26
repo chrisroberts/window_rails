@@ -1,5 +1,7 @@
 class WindowRailsController < ApplicationController
-  
+
+  unloadable
+
   # Make sure we kick any thing out that is making a request other
   # than openning a new window
   before_filter :redirect_out, :except => :open_window

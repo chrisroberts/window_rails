@@ -10,13 +10,14 @@ module WindowRailsView
   def link_to_window(name, options={}, html_opts={})
     frame_url = options.has_key?(:iframe) ? url_for(options.delete(:iframe)) : nil
     window_url = options.has_key?(:url) ? url_for(options.delete(:url)) : nil
-    link_to(
-      name, open_window_path(
+    link_to_remote(
+      name, {:url => 
+      open_window_path(
         :window_url => window_url,
         :iframe_url => frame_url,
         :window_options => options
-      ),
-      {:remote => true}.merge(html_opts)
+      )},
+      html_opts
     )
   end
   
