@@ -125,7 +125,7 @@ module WindowRailsGenerators
     win = options.delete(:window)
     error = options.delete(:error)
     key = store_content(content)
-    self << check_for_window(win, error){ update_window_contents(key, win) }
+    self << check_for_window(win, error){ update_window_contents(key, win, options) }
     nil
   end
   
