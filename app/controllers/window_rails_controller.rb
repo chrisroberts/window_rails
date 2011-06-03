@@ -35,8 +35,11 @@ class WindowRailsController < ApplicationController
         else
           content = {:content_url => params[:window_url]}
         end
-        params['window_options'].keys.each do |key|
-          opts[key.to_sym] = params['window_options'][key]
+        base_key = params[:window_options] ? :window_options : 'window_options'
+        if(params[base_key])
+          params[base_key].keys.each do |key|
+            opts[key.to_sym] = params[base_key][key]
+          end
         end
         render :update do |page|
           page.open_window(content, opts || {})

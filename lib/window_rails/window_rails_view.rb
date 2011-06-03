@@ -20,6 +20,27 @@ module WindowRailsView
       html_opts
     )
   end
+
+  # options:: Options hash supplied to windowing system
+  # Extra options include :method and :delay. :delay is the number
+  # of seconds to wait after page load to open window
+  def open_window(options={})
+    frame_url = options.has_key?(:iframe) ? url_for(options.delete(:iframe)) : nil
+    window_url = options.has_key?(:url) ? url_for(options.delete(:url)) : nil
+    method = options.delete(:method) || 'get'
+    delay = options.delete(:delay) || 0.5
+    delay = delay * 1000
+    url = open_window_path(
+      :window_url => window_url,
+      :iframe_url => frame_url,
+      :window_options => options
+    ).html_safe
+    javascript_tag{
+      "setTimeout(function(){
+        jQuery.#{method}('#{url}');
+       }, #{delay.to_i});".html_safe
+    }
+  end
   
 end
 ActionView::Base.send :include, WindowRailsView
