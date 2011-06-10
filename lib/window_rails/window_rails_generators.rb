@@ -1,7 +1,8 @@
+require 'rails_javascript_helpers'
+
 module WindowRailsGenerators
 
   include RailsJavaScriptHelpers
-
   include ActionView::Helpers::JavaScriptHelper
   include ActionView::Helpers::TagHelper
   
