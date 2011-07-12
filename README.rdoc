@@ -4,25 +4,14 @@ WindowRails is a plugin for Rails that provides easy to use AJAXy windows. It is
 completely on {jquery-ui}[http://jquery-ui.com] and the [jQuery Window Plugin}[http://fstoke.me/jquery/window/]
 with helpers for Rails to make it easy to use from a Rails app.
 
-IMPORTANT NOTE: This version of WindowRails is supports Rails 3 and greater only.
+== Requirements
+
+* jQuery
+* jQuery-UI with Dialog widget enabled
 
 == Installation
 
-Since this is still in high development, no gems are currently being released. For now,
-the Gemfile needs to point to the repository:
-
-  gem "window_rails", :git => "http://github.com/chrisroberts/window_rails.git", :branch => "jquery"
-
-After a bundle update, run:
-
   rake window_rails:install
-
-== Configuration
-
-After install, add these in the head of your application.html.erb file:
-  
-  <%= javascript_include_tag :plugins %>
-  <%= stylesheet_link_tag :plugins %>
 
 === Basic examples to get you started
 
@@ -77,11 +66,6 @@ After install, add these in the head of your application.html.erb file:
 
 {Issues}[http://github.com/chrisroberts/window_rails/issues]
 
-== Thanks
-
-* Many thanks to David Hung (creator of {jQuery Window Plugin}[http://fstoke.me/jquery/window/]
-
 == License
 
-* jQuery Window Plugin is dual licensed the MIT license and GPL license
-* WindowRails continues on under the MIT license
+* WindowRails is released under an MIT license
