@@ -41,31 +41,35 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000020">apply_window_constraints</a></li>
-              <li><a href="#M000014">check_for_window</a></li>
-              <li><a href="#M000024">close_all_windows</a></li>
-              <li><a href="#M000011">close_info_window</a></li>
-              <li><a href="#M000023">close_window</a></li>
-              <li><a href="#M000018">create_window</a></li>
-              <li><a href="#M000015">else_block</a></li>
+              <li><a href="#M000015">check_for_window</a></li>
+              <li><a href="#M000007">close_alert_window</a></li>
+              <li><a href="#M000025">close_all_windows</a></li>
+              <li><a href="#M000010">close_info_window</a></li>
+              <li><a href="#M000024">close_window</a></li>
+              <li><a href="#M000020">create_window</a></li>
               <li><a href="#M000017">focus_window</a></li>
-              <li><a href="#M000026">observe_dynamically_loaded_field</a></li>
-              <li><a href="#M000008">open_alert_window</a></li>
-              <li><a href="#M000009">open_confirm_window</a></li>
-              <li><a href="#M000010">open_info_window</a></li>
-              <li><a href="#M000021">open_window</a></li>
-              <li><a href="#M000025">refresh_window</a></li>
-              <li><a href="#M000019">show_window</a></li>
-              <li><a href="#M000022">store_content</a></li>
-              <li><a href="#M000012">update_info_window</a></li>
-              <li><a href="#M000013">update_window</a></li>
+              <li><a href="#M000018">maximize_window</a></li>
+              <li><a href="#M000019">minimize_window</a></li>
+              <li><a href="#M000027">observe_dynamically_loaded_field</a></li>
+              <li><a href="#M000006">open_alert_window</a></li>
+              <li><a href="#M000008">open_confirm_window</a></li>
+              <li><a href="#M000009">open_info_window</a></li>
+              <li><a href="#M000022">open_window</a></li>
+              <li><a href="#M000026">refresh_window</a></li>
+              <li><a href="#M000021">show_window</a></li>
+              <li><a href="#M000023">store_content</a></li>
+              <li><a href="#M000011">update_info_window</a></li>
+              <li><a href="#M000014">update_window</a></li>
               <li><a href="#M000016">update_window_contents</a></li>
+              <li><a href="#M000013">window</a></li>
+              <li><a href="#M000012">window_setup</a></li>
             </ol>
           </div>
           <div id='context'>
             <div id='includes'>
               <h2>Included modules</h2>
               <ol>
+                <li>RailsJavaScriptHelpers</li>
                 <li>ActionView::Helpers::JavaScriptHelper</li>
                 <li>ActionView::Helpers::TagHelper</li>
               </ol>
@@ -74,39 +78,11 @@
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='method public-instance' id='method-M000020'>
-                <a name='M000020'></a>
-                <div class='synopsis'>
-                  <span class='name'>apply_window_constraints</span>
-                  <span class='arguments'>(win, constraints)</span>
-                </div>
-                <div class='description'>
-                  <table>
-                  <tr><td valign="top">win:</td><td>Name of window
-                  
-                  </td></tr>
-                  <tr><td valign="top">constraints:</td><td>Constaint hash {:left, :right, :top, :bottom}
-                  
-                  </td></tr>
-                  </table>
-                  <p>
-                  Sets the constraints on the window. Generally this should not be used,
-                  rather <a href="WindowRailsGenerators.html#M000021">open_window</a> should
-                  be used
-                  </p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000020-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000020-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 129</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">apply_window_constraints</span>(<span class="ruby-identifier">win</span>, <span class="ruby-identifier">constraints</span>)&#x000A;    <span class="ruby-identifier">opts</span> = {<span class="ruby-identifier">:left</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>, <span class="ruby-identifier">:right</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>, <span class="ruby-identifier">:top</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>, <span class="ruby-identifier">:bottom</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>}&#x000A;    <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">constraints</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">constraints</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>)&#x000A;    <span class="ruby-identifier">s</span> = <span class="ruby-keyword kw">nil</span>&#x000A;    <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">win</span>.<span class="ruby-identifier">blank?</span>)&#x000A;      <span class="ruby-identifier">s</span> = <span class="ruby-node">&quot;Windows.getWindowByName('#{escape_javascript(win)}')&quot;</span>&#x000A;    <span class="ruby-keyword kw">else</span>&#x000A;      <span class="ruby-identifier">s</span> = <span class="ruby-value str">&quot;Windows.windows.values().last()&quot;</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;#{s}.setConstraint(true, {#{opts.map{|k,v|&quot;#{escape_javascript(k.to_s)}:'#{escape_javascript(v.to_s)}'&quot;}.join(', ')}});&quot;</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='method public-instance' id='method-M000014'>
-                <a name='M000014'></a>
+              <div class='method public-instance' id='method-M000015'>
+                <a name='M000015'></a>
                 <div class='synopsis'>
                   <span class='name'>check_for_window</span>
-                  <span class='arguments'>(name, error) {|if block_given?| ...}</span>
+                  <span class='arguments'>(name, error=true) {|if block_given?| ...}</span>
                 </div>
                 <div class='description'>
                   <table>
@@ -123,14 +99,32 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000014-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000015-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000014-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 58</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">check_for_window</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">error</span>)&#x000A;    <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">name</span>.<span class="ruby-identifier">blank?</span>)&#x000A;      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span>  <span class="ruby-value str">&quot;if(Windows.windows.values().size() &gt; 0){&quot;</span>&#x000A;    <span class="ruby-keyword kw">else</span>&#x000A;      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;if(Windows.existsByName('#{escape_javascript(name)}')){&quot;</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">yield</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block_given?</span>&#x000A;    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;}&quot;</span>&#x000A;    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;else { alert('Unexpected error. Failed to locate window for output.'); }&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">error</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000015-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 140</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">check_for_window</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">error</span>=<span class="ruby-keyword kw">true</span>)&#x000A;    <span class="ruby-identifier">name</span> = <span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">dup</span>&#x000A;    <span class="ruby-identifier">name</span>.<span class="ruby-identifier">slice!</span>(<span class="ruby-value">0</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">name</span>.<span class="ruby-identifier">start_with?</span>(<span class="ruby-value str">'#'</span>)&#x000A;    <span class="ruby-identifier">window_setup</span>&#x000A;    <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">name</span>.<span class="ruby-identifier">blank?</span>)&#x000A;      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;if(window.window_rails_windows.length &gt; 0){&quot;</span>&#x000A;    <span class="ruby-keyword kw">else</span>&#x000A;      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;if(window.window_rails_windows['#{name}']){&quot;</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">yield</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block_given?</span>&#x000A;    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;}&quot;</span>&#x000A;    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;else { alert('Unexpected error. Failed to locate window for output.'); }&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">error</span>&#x000A;    <span class="ruby-keyword kw">nil</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000024'>
-                <a name='M000024'></a>
+              <div class='method public-instance' id='method-M000007'>
+                <a name='M000007'></a>
+                <div class='synopsis'>
+                  <span class='name'>close_alert_window</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Closes alert window
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000007-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000007-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 32</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">close_alert_window</span>&#x000A;    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">'jQuery(&quot;#alert_modal&quot;).dialog(&quot;close&quot;);'</span>&#x000A;    <span class="ruby-keyword kw">nil</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000025'>
+                <a name='M000025'></a>
                 <div class='synopsis'>
                   <span class='name'>close_all_windows</span>
                   <span class='arguments'>()</span>
@@ -141,14 +135,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000024-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000025-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000024-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 222</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">close_all_windows</span>&#x000A;    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;Windows.closeAll();&quot;</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000025-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 349</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">close_all_windows</span>&#x000A;    <span class="ruby-identifier">setup_windows</span>&#x000A;    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">'&#x000A;      jQuery.each(&#x000A;        window_rails_windows_array,&#x000A;        function(name, win){&#x000A;          window.window_rails_windows[win].dialog(&quot;close&quot;);&#x000A;        }&#x000A;      );&#x000A;    '</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000011'>
-                <a name='M000011'></a>
+              <div class='method public-instance' id='method-M000010'>
+                <a name='M000010'></a>
                 <div class='synopsis'>
                   <span class='name'>close_info_window</span>
                   <span class='arguments'>()</span>
@@ -159,14 +153,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000011-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000010-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000011-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 31</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">close_info_window</span>&#x000A;    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;Dialog.closeInfo();&quot;</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000010-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 82</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">close_info_window</span>&#x000A;    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">'jQuery(&quot;#information_modal&quot;).dialog(&quot;close&quot;);'</span>&#x000A;    <span class="ruby-keyword kw">nil</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000023'>
-                <a name='M000023'></a>
+              <div class='method public-instance' id='method-M000024'>
+                <a name='M000024'></a>
                 <div class='synopsis'>
                   <span class='name'>close_window</span>
                   <span class='arguments'>(options = {})</span>
@@ -183,14 +177,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000023-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000024-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000023-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 210</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">close_window</span>(<span class="ruby-identifier">options</span> = {})&#x000A;    <span class="ruby-identifier">win</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:window</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">options</span>.<span class="ruby-identifier">to_s</span>&#x000A;    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;var myWin = null;&quot;</span>&#x000A;    <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">win</span>.<span class="ruby-identifier">blank?</span>)&#x000A;      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;myWin = Windows.getWindowByName('#{escape_javascript(win)}');&quot;</span>&#x000A;    <span class="ruby-keyword kw">else</span>&#x000A;      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;if(Windows.windows.values().last()){ myWin = Windows.windows.values().last(); }&quot;</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;if(myWin){ myWin.close(); }&quot;</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000024-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 335</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">close_window</span>(<span class="ruby-identifier">options</span> = {})&#x000A;    <span class="ruby-identifier">win_name</span> = <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">options</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>))&#x000A;      (<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:window</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:name</span>]).<span class="ruby-identifier">to_s</span>&#x000A;    <span class="ruby-keyword kw">elsif</span>(<span class="ruby-identifier">options</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>))&#x000A;      <span class="ruby-identifier">options</span>.<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">:to_s</span>)&#x000A;    <span class="ruby-keyword kw">else</span>&#x000A;      <span class="ruby-identifier">options</span>.<span class="ruby-identifier">to_s</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-identifier">win_name</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">win</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-identifier">window</span>(<span class="ruby-identifier">win</span>) <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">'.dialog(&quot;close&quot;);'</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000018'>
-                <a name='M000018'></a>
+              <div class='method public-instance' id='method-M000020'>
+                <a name='M000020'></a>
                 <div class='synopsis'>
                   <span class='name'>create_window</span>
                   <span class='arguments'>(key, win, options)</span>
@@ -209,32 +203,14 @@
                   </table>
                   <p>
                   Creates a new window. Generally this should not be called, rather <a
-                  href="WindowRailsGenerators.html#M000021">open_window</a> should be used
+                  href="WindowRailsGenerators.html#M000022">open_window</a> should be used
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000018-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000020-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000018-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 103</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_window</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">win</span>, <span class="ruby-identifier">options</span>)&#x000A;    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;var myWin = new Window({#{options.map{|k,v|&quot;#{escape_javascript(k.to_s)}:'#{escape_javascript(v.to_s)}'&quot;}.join(', ')}});&quot;</span>&#x000A;    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;Windows.registerByName('#{escape_javascript(win)}', myWin);&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">win</span>.<span class="ruby-identifier">blank?</span>&#x000A;    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;myWin.setHTMLContent(window_rails_contents.get('#{key}'));&quot;</span>&#x000A;    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;myWin.setCloseCallback(function(win){ win.destroy(); return true; });&quot;</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='method public-instance' id='method-M000015'>
-                <a name='M000015'></a>
-                <div class='synopsis'>
-                  <span class='name'>else_block</span>
-                  <span class='arguments'>() {|if block_given?| ...}</span>
-                </div>
-                <div class='description'>
-                  <p>
-                  Simply wraps a block within an else statement
-                  </p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000015-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000015-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 70</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">else_block</span>&#x000A;    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;else {&quot;</span>&#x000A;    <span class="ruby-keyword kw">yield</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block_given?</span>&#x000A;    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;}&quot;</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000020-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 188</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_window</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">win</span>, <span class="ruby-identifier">options</span>)&#x000A;    <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:auto_open</span>] <span class="ruby-operator">||=</span> <span class="ruby-keyword kw">false</span>&#x000A;    <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:close</span>] = <span class="ruby-node">&quot;function(event,ui){ &#x000A;      #{&#x000A;        if(options[:close])&#x000A;          &quot;callback = #{options[:close]}; callback();&quot;&#x000A;        end&#x000A;      }&#x000A;      jQuery('##{win}').dialog('destroy'); &#x000A;      window.window_rails_windows['#{win}'] = null;&#x000A;      window.window_rails_windows_array.splice(window.window_rails_windows_array.indexOf('#{win}'), 1);&#x000A;      jQuery('##{win}').remove();&#x000A;    }&quot;</span>&#x000A;    <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">win</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>))&#x000A;      <span class="ruby-identifier">win</span> = <span class="ruby-identifier">win</span>.<span class="ruby-identifier">to_s</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">win</span>.<span class="ruby-identifier">start_with?</span>(<span class="ruby-value str">'#'</span>))&#x000A;      <span class="ruby-identifier">win</span>.<span class="ruby-identifier">slice!</span>(<span class="ruby-value">0</span>)&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-identifier">window_setup</span>&#x000A;    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;&#x000A;      if(jQuery('#window_rails_windows').size() == 0){&#x000A;        jQuery('body').append('&lt;div id=\&quot;window_rails_windows\&quot; style=\&quot;visibility:hidden;display:none;\&quot;&gt;&lt;/div&gt;');&#x000A;      }&#x000A;      if(jQuery('##{win}').size() == 0){&#x000A;        jQuery('#window_rails_windows').append('&lt;div id=\&quot;#{win}\&quot;&gt;&lt;/div&gt;');&#x000A;      }&#x000A;      window.window_rails_windows['#{win}'] = jQuery('##{win}');&#x000A;      window.window_rails_windows_array.push('#{win}');&#x000A;    &quot;</span>&#x000A;    <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">key</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:url</span>)&#x000A;      <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:auto_open</span>] = <span class="ruby-keyword kw">true</span>&#x000A;      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;&#x000A;        jQuery.get(&#x000A;          '#{options.delete(:url)}',&#x000A;          function(data){&#x000A;            window.window_rails_windows['#{win}']&#x000A;              .html(data)&#x000A;                .dialog(#{format_type_to_js(options)})&#x000A;                  .dialog('open');&#x000A;          }&#x000A;        );&#x000A;      &quot;</span>&#x000A;    <span class="ruby-keyword kw">else</span>&#x000A;      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;&#x000A;        window.window_rails_windows['#{win}']&#x000A;          .html(window.window_rails_contents['#{key}'])&#x000A;            .dialog(#{format_type_to_js(options)});&#x000A;      &quot;</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">nil</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-M000017'>
@@ -257,11 +233,59 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000017-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000017-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 90</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">focus_window</span>(<span class="ruby-identifier">win</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;    <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">win</span>.<span class="ruby-identifier">blank?</span>)&#x000A;      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;Windows.focus(Windows.getWindowByName('#{escape_javascript(win)}').getId());&quot;</span>&#x000A;    <span class="ruby-keyword kw">else</span>&#x000A;      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;Windows.focus(Windows.windows.values().last().getId());&quot;</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000017-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 166</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">focus_window</span>(<span class="ruby-identifier">win</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;    <span class="ruby-identifier">window</span>(<span class="ruby-identifier">win</span>) <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">'.dialog(&quot;focus&quot;);'</span>&#x000A;    <span class="ruby-keyword kw">nil</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000026'>
-                <a name='M000026'></a>
+              <div class='method public-instance' id='method-M000018'>
+                <a name='M000018'></a>
+                <div class='synopsis'>
+                  <span class='name'>maximize_window</span>
+                  <span class='arguments'>(win=nil)</span>
+                </div>
+                <div class='description'>
+                  <table>
+                  <tr><td valign="top">win:</td><td>Name of window
+                  
+                  </td></tr>
+                  </table>
+                  <p>
+                  Will maximize the window. If no name provided, topmost window will be
+                  maximized
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000018-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000018-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 173</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">maximize_window</span>(<span class="ruby-identifier">win</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;    <span class="ruby-comment cmt"># noop</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000019'>
+                <a name='M000019'></a>
+                <div class='synopsis'>
+                  <span class='name'>minimize_window</span>
+                  <span class='arguments'>(win)</span>
+                </div>
+                <div class='description'>
+                  <table>
+                  <tr><td valign="top">win:</td><td>Name of window
+                  
+                  </td></tr>
+                  </table>
+                  <p>
+                  Will minimize the window. If no name provided, topmost window will be
+                  minimized
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000019-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000019-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 179</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">minimize_window</span>(<span class="ruby-identifier">win</span>)&#x000A;    <span class="ruby-comment cmt"># noop</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000027'>
+                <a name='M000027'></a>
                 <div class='synopsis'>
                   <span class='name'>observe_dynamically_loaded_field</span>
                   <span class='arguments'>(field_id, options={})</span>
@@ -277,18 +301,19 @@
                   </table>
                   <p>
                   Helper for observing fields that have been dynamically loaed into the DOM.
-                  Works like observe_field but not as full featured.
+                  Works like observe_field but not as full featured. NOTE: Currently does
+                  nothing NOTE: Deprecated (remaining temporarily for compatibility reasons)
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000026-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000027-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000026-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 244</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">observe_dynamically_loaded_field</span>(<span class="ruby-identifier">field_id</span>, <span class="ruby-identifier">options</span>={})&#x000A;    <span class="ruby-identifier">f</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:function</span>)&#x000A;    <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">f</span>)&#x000A;      <span class="ruby-identifier">f</span> = <span class="ruby-node">&quot;function(event){ new Ajax.Request('#{escape_javascript(@context.url_for(options[:url]).to_s)}', {asynchronous:true, evalScripts:true,parameters:'#{escape_javascript(options[:with].to_s)}='+$('#{escape_javascript(options[:with].to_s)}').getValue()})}&quot;</span>&#x000A;    <span class="ruby-keyword kw">else</span>&#x000A;      <span class="ruby-identifier">f</span> = <span class="ruby-node">&quot;function(event){ #{f}; }&quot;</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;if($('#{escape_javascript(field_id.to_s)}')){ $('#{escape_javascript(field_id.to_s)}').observe('change', #{f}); }&quot;</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000027-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 384</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">observe_dynamically_loaded_field</span>(<span class="ruby-identifier">field_id</span>, <span class="ruby-identifier">options</span>={}) <span class="ruby-comment cmt"># :nodoc</span>&#x000A;  <span class="ruby-keyword kw">return</span>&#x000A;    <span class="ruby-identifier">f</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:function</span>)&#x000A;    <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">f</span>)&#x000A;      <span class="ruby-identifier">f</span> = <span class="ruby-node">&quot;function(event){ new Ajax.Request('#{escape_javascript(@context.url_for(options[:url]).to_s)}', {asynchronous:true, evalScripts:true,parameters:'#{escape_javascript(options[:with].to_s)}='+$('#{escape_javascript(options[:with].to_s)}').getValue()})}&quot;</span>&#x000A;    <span class="ruby-keyword kw">else</span>&#x000A;      <span class="ruby-identifier">f</span> = <span class="ruby-node">&quot;function(event){ #{f}; }&quot;</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;if($('#{escape_javascript(field_id.to_s)}')){ $('#{escape_javascript(field_id.to_s)}').observe('change', #{f}); }&quot;</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000008'>
-                <a name='M000008'></a>
+              <div class='method public-instance' id='method-M000006'>
+                <a name='M000006'></a>
                 <div class='synopsis'>
                   <span class='name'>open_alert_window</span>
                   <span class='arguments'>(msg, options={})</span>
@@ -307,14 +332,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000008-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000006-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000008-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 9</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">open_alert_window</span>(<span class="ruby-identifier">msg</span>, <span class="ruby-identifier">options</span>={})&#x000A;    <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:width</span>] <span class="ruby-operator">||=</span> <span class="ruby-value">200</span>&#x000A;    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;Dialog.alert('#{escape_javascript(msg)}', {#{options.map{|k,v|&quot;#{escape_javascript(k.to_s)}:'#{escape_javascript(v.to_s)}'&quot;}.join(',')}});&quot;</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000006-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 12</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">open_alert_window</span>(<span class="ruby-identifier">msg</span>, <span class="ruby-identifier">options</span>={})&#x000A;    <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:width</span>] <span class="ruby-operator">||=</span> <span class="ruby-value">200</span>&#x000A;    <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:modal</span>] = <span class="ruby-keyword kw">true</span>&#x000A;    <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:title</span>] <span class="ruby-operator">||=</span> <span class="ruby-value str">'Alert!'</span>&#x000A;    <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:buttons</span>] <span class="ruby-operator">||=</span> {<span class="ruby-value str">'OK'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'function(){ jQuery(this).dialog(&quot;close&quot;);}'</span>}&#x000A;    <span class="ruby-identifier">store_content</span>(<span class="ruby-identifier">msg</span>, <span class="ruby-value str">'alert_modal'</span>);&#x000A;    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;&#x000A;      if(jQuery('#alert_modal').size() == 0){&#x000A;        jQuery('&lt;div id=\&quot;alert_modal\&quot;&gt;&lt;/div&gt;')&#x000A;          .html(window_rails_contents['alert_modal'])&#x000A;            .dialog(#{format_type_to_js(options)});&#x000A;      } else {&#x000A;        jQuery('#alert_modal')&#x000A;          .html(window_rails_contents['alert_modal'])&#x000A;            .dialog(#{format_type_to_js(options)}).focus();&#x000A;      }&quot;</span>&#x000A;      <span class="ruby-keyword kw">nil</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000009'>
-                <a name='M000009'></a>
+              <div class='method public-instance' id='method-M000008'>
+                <a name='M000008'></a>
                 <div class='synopsis'>
                   <span class='name'>open_confirm_window</span>
                   <span class='arguments'>(msg, options={})</span>
@@ -333,14 +358,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000009-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000008-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000009-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 17</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">open_confirm_window</span>(<span class="ruby-identifier">msg</span>, <span class="ruby-identifier">options</span>={})&#x000A;    <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:width</span>] <span class="ruby-operator">||=</span> <span class="ruby-value">200</span>&#x000A;    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;Dialog.confirm('#{escape_javascript(msg)}', {#{options.map{|k,v|&quot;#{escape_javascript(k.to_s)}:'#{escape_javascript(v.to_s)}'&quot;}.join(',')}});&quot;</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000008-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 40</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">open_confirm_window</span>(<span class="ruby-identifier">msg</span>, <span class="ruby-identifier">options</span>={})&#x000A;    <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:width</span>] <span class="ruby-operator">||=</span> <span class="ruby-value">200</span>&#x000A;    <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:modal</span>] = <span class="ruby-keyword kw">true</span>&#x000A;    <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:title</span>] <span class="ruby-operator">||=</span> <span class="ruby-value str">'Confirm'</span>&#x000A;    <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:buttons</span>] <span class="ruby-operator">||=</span> {<span class="ruby-value str">'OK'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'function(){ jQuery(this).dialog(&quot;close&quot;);}'</span>}&#x000A;    <span class="ruby-identifier">store_content</span>(<span class="ruby-identifier">msg</span>, <span class="ruby-value str">'confirmation_modal'</span>)&#x000A;    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;&#x000A;      if(jQuery('#confirmation_modal').size() == 0){&#x000A;        jQuery('&lt;div id=\&quot;confirmation_modal\&quot;&gt;&lt;/div&gt;')&#x000A;          .html(window_rails_contents['confirmation_modal'])&#x000A;            .dialog(#{format_type_to_js(options)});&#x000A;      } else {&#x000A;        jQuery('#confirmation_modal')&#x000A;          .html(window_rails_contents['confirmation_modal'])&#x000A;            .dialog(#{format_type_to_js(options)}).focus();&#x000A;      }&quot;</span>&#x000A;    <span class="ruby-keyword kw">nil</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000010'>
-                <a name='M000010'></a>
+              <div class='method public-instance' id='method-M000009'>
+                <a name='M000009'></a>
                 <div class='synopsis'>
                   <span class='name'>open_info_window</span>
                   <span class='arguments'>(msg, options={})</span>
@@ -359,14 +384,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000010-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000009-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000010-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 25</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">open_info_window</span>(<span class="ruby-identifier">msg</span>, <span class="ruby-identifier">options</span>={})&#x000A;    <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:width</span>] <span class="ruby-operator">||=</span> <span class="ruby-value">200</span>&#x000A;    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;Dialog.info('#{escape_javascript(msg)}', {#{options.map{|k,v|&quot;#{escape_javascript(k.to_s)}:'#{escape_javascript(v.to_s)}'&quot;}.join(',')}});&quot;</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000009-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 62</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">open_info_window</span>(<span class="ruby-identifier">msg</span>, <span class="ruby-identifier">options</span>={})&#x000A;    <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:width</span>] <span class="ruby-operator">||=</span> <span class="ruby-value">200</span>&#x000A;    <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:modal</span>] = <span class="ruby-keyword kw">true</span>&#x000A;    <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:title</span>] <span class="ruby-operator">||=</span> <span class="ruby-value str">'Information'</span>&#x000A;    <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:close_on_escape</span>] = <span class="ruby-keyword kw">false</span>&#x000A;    <span class="ruby-identifier">store_content</span>(<span class="ruby-identifier">msg</span>, <span class="ruby-value str">'information_modal'</span>)&#x000A;    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;&#x000A;      if(jQuery('#information_modal').size() == 0){&#x000A;        jQuery('&lt;div id=\&quot;information_modal\&quot;&gt;&lt;/div&gt;')&#x000A;          .html(window_rails_contents['information_modal'])&#x000A;            .dialog(#{format_type_to_js(options)});&#x000A;      } else {&#x000A;        jQuery('#information_modal')&#x000A;          .html(window_rails_contents['information_modal'])&#x000A;            .dialog(#{format_type_to_js(options)}).focus();&#x000A;      }&quot;</span>&#x000A;    <span class="ruby-keyword kw">nil</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000021'>
-                <a name='M000021'></a>
+              <div class='method public-instance' id='method-M000022'>
+                <a name='M000022'></a>
                 <div class='synopsis'>
                   <span class='name'>open_window</span>
                   <span class='arguments'>(content, options={})</span>
@@ -380,7 +405,7 @@
                   
                   </td></tr>
                   </table>
-                  <pre>* :modal -&gt; Window should be modal&#x000A;* :window -&gt; Name to reference window (used for easy updating and closing)&#x000A;* :constraints -&gt; Hash containing top,left,right,bottom values for padding from edges. False value will turn off constraints (window can travel out of viewport)&#x000A;* :iframe -&gt; URL to load within an IFrame in the window&#x000A;* :width -&gt; Width of the window&#x000A;* :height -&gt; Height of the window&#x000A;* :className -&gt; Theme name for the window&#x000A;* :no_update -&gt; Set to true to force creation of a new window even if window of same name already exists (defaults to false)</pre>
+                  <pre>* :modal -&gt; Window should be modal&#x000A;* :window -&gt; Name to reference window (used for easy updating and closing)&#x000A;* :constraints -&gt; Hash containing top,left,right,bottom values for padding from edges. False value will turn off constraints (window can travel out of viewport)&#x000A;* :iframe -&gt; URL to load within an IFrame in the window&#x000A;* :width -&gt; Width of the window&#x000A;* :height -&gt; Height of the window&#x000A;* :no_update -&gt; Set to true to force creation of a new window even if window of same name already exists (defaults to false)</pre>
                   <p>
                   Creates a new window and displays it at the center of the viewport. Content
                   can be provided as a string, or as a Hash. If :url is defined, the window
@@ -390,14 +415,14 @@
                   <pre>There are two ways to load remote content. The first is to use :url =&gt; 'http://host/page.html' for content. This will&#x000A;load the contents directly into the window. The second is to set content to nil and pass :iframe =&gt; 'http://host/page.html'&#x000A;in the options. This later form will load the contents within an IFrame in the window. This is useful in that it will&#x000A;be isolated from the current page, but this isolation means it cannot communicate with other windows on the page (including&#x000A;its own).</pre>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000021-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000022-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000021-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 160</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">open_window</span>(<span class="ruby-identifier">content</span>, <span class="ruby-identifier">options</span>={})&#x000A;    <span class="ruby-identifier">modal</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:modal</span>)&#x000A;    <span class="ruby-identifier">win</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:window</span>)&#x000A;    <span class="ruby-identifier">constraints</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:constraints</span>)&#x000A;    <span class="ruby-identifier">no_update</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:no_update</span>)&#x000A;    <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:className</span>] = <span class="ruby-value str">'alphacube'</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:className</span>]&#x000A;    <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">content</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>))&#x000A;      <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">content</span>[<span class="ruby-identifier">:url</span>])&#x000A;        <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:url</span>] = <span class="ruby-ivar">@context</span>.<span class="ruby-identifier">url_for</span>(<span class="ruby-identifier">content</span>[<span class="ruby-identifier">:url</span>])&#x000A;        <span class="ruby-identifier">content</span> = <span class="ruby-keyword kw">nil</span>&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-identifier">content</span> = <span class="ruby-identifier">render</span>(<span class="ruby-identifier">content</span>)&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:width</span>] <span class="ruby-operator">||=</span> <span class="ruby-value">300</span>&#x000A;    <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:height</span>] <span class="ruby-operator">||=</span> <span class="ruby-value">200</span>&#x000A;    <span class="ruby-identifier">key</span> = <span class="ruby-identifier">store_content</span>(<span class="ruby-identifier">content</span>)&#x000A;    <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">no_update</span>)&#x000A;      <span class="ruby-identifier">create_window</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">win</span>, <span class="ruby-identifier">options</span>)&#x000A;      <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">constraints</span> <span class="ruby-operator">==</span> <span class="ruby-keyword kw">false</span>)&#x000A;        <span class="ruby-identifier">apply_window_constraints</span>(<span class="ruby-identifier">win</span>, <span class="ruby-identifier">constraints</span>)&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-identifier">show_window</span>(<span class="ruby-identifier">win</span>, <span class="ruby-identifier">modal</span>)&#x000A;    <span class="ruby-keyword kw">else</span>&#x000A;      <span class="ruby-identifier">check_for_window</span>(<span class="ruby-identifier">win</span>, <span class="ruby-keyword kw">false</span>) <span class="ruby-keyword kw">do</span>&#x000A;        <span class="ruby-identifier">update_window_contents</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">win</span>)&#x000A;        <span class="ruby-identifier">focus_window</span>(<span class="ruby-identifier">win</span>)&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-identifier">else_block</span> <span class="ruby-keyword kw">do</span>&#x000A;        <span class="ruby-identifier">create_window</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">win</span>, <span class="ruby-identifier">options</span>)&#x000A;        <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">constraints</span> <span class="ruby-operator">==</span> <span class="ruby-keyword kw">false</span>)&#x000A;          <span class="ruby-identifier">apply_window_constraints</span>(<span class="ruby-identifier">win</span>, <span class="ruby-identifier">constraints</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-identifier">show_window</span>(<span class="ruby-identifier">win</span>, <span class="ruby-identifier">modal</span>)&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000022-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 275</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">open_window</span>(<span class="ruby-identifier">content</span>, <span class="ruby-identifier">options</span>={})&#x000A;    <span class="ruby-identifier">key</span> = <span class="ruby-keyword kw">nil</span>&#x000A;    <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:iframe</span>])&#x000A;      <span class="ruby-identifier">iframe</span> = <span class="ruby-ivar">@context</span>.<span class="ruby-identifier">url_for</span>(<span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:iframe</span>))&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">content</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>))&#x000A;      <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">content</span>[<span class="ruby-identifier">:url</span>])&#x000A;        <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:iframe</span>] = <span class="ruby-ivar">@context</span>.<span class="ruby-identifier">url_for</span>(<span class="ruby-identifier">content</span>[<span class="ruby-identifier">:url</span>])&#x000A;        <span class="ruby-identifier">content</span> = <span class="ruby-keyword kw">nil</span>&#x000A;      <span class="ruby-keyword kw">elsif</span>(<span class="ruby-identifier">content</span>[<span class="ruby-identifier">:content_url</span>])&#x000A;        <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:url</span>] = <span class="ruby-ivar">@context</span>.<span class="ruby-identifier">url_for</span>(<span class="ruby-identifier">content</span>[<span class="ruby-identifier">:content_url</span>])&#x000A;        <span class="ruby-identifier">content</span> = <span class="ruby-keyword kw">nil</span>&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-identifier">content</span> = <span class="ruby-ivar">@context</span>.<span class="ruby-identifier">render</span>(<span class="ruby-identifier">content</span>)&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:width</span>] <span class="ruby-operator">||=</span> <span class="ruby-value">300</span>&#x000A;    <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:height</span>] <span class="ruby-operator">||=</span> <span class="ruby-value">200</span>&#x000A;    <span class="ruby-identifier">modal</span> = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:modal</span>]&#x000A;    <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:on_close</span>])&#x000A;      <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:close</span>] = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:on_close</span>)&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:iframe</span>])&#x000A;      <span class="ruby-identifier">key</span> = <span class="ruby-identifier">:iframe</span>&#x000A;    <span class="ruby-keyword kw">elsif</span>(<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:url</span>])&#x000A;      <span class="ruby-identifier">key</span> = <span class="ruby-identifier">:url</span>&#x000A;    <span class="ruby-keyword kw">else</span>&#x000A;      <span class="ruby-identifier">key</span> = <span class="ruby-identifier">store_content</span>(<span class="ruby-identifier">content</span>)&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-identifier">win</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:window</span>) <span class="ruby-operator">||</span> <span class="ruby-node">&quot;win_#{rand(99999)}&quot;</span>&#x000A;    <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:no_update</span>))&#x000A;      <span class="ruby-identifier">create_window</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">win</span>, <span class="ruby-identifier">options</span>)&#x000A;      <span class="ruby-identifier">show_window</span>(<span class="ruby-identifier">win</span>, <span class="ruby-identifier">modal</span>)&#x000A;    <span class="ruby-keyword kw">else</span>&#x000A;      <span class="ruby-identifier">check_for_window</span>(<span class="ruby-identifier">win</span>, <span class="ruby-keyword kw">false</span>) <span class="ruby-keyword kw">do</span>&#x000A;        <span class="ruby-identifier">update_window_contents</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">win</span>, <span class="ruby-identifier">options</span>)&#x000A;        <span class="ruby-identifier">focus_window</span>(<span class="ruby-identifier">win</span>)&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-identifier">else_block</span> <span class="ruby-keyword kw">do</span>&#x000A;        <span class="ruby-identifier">create_window</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">win</span>, <span class="ruby-identifier">options</span>)&#x000A;        <span class="ruby-identifier">show_window</span>(<span class="ruby-identifier">win</span>, <span class="ruby-identifier">modal</span>)&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">nil</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000025'>
-                <a name='M000025'></a>
+              <div class='method public-instance' id='method-M000026'>
+                <a name='M000026'></a>
                 <div class='synopsis'>
                   <span class='name'>refresh_window</span>
                   <span class='arguments'>(*args)</span>
@@ -409,18 +434,19 @@
                   </td></tr>
                   </table>
                   <p>
-                  Refresh window contents
+                  Refresh window contents NOTE: Currently does nothing NOTE: Deprecated
+                  (remaining temporarily for compatibility reasons)
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000025-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000026-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000025-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 228</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">refresh_window</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)&#x000A;    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;var myWin = null;&quot;</span>&#x000A;    <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">args</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">:all</span>))&#x000A;      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;Windows.windows.values().each(function(win){ win.refresh(); });&quot;</span>&#x000A;    <span class="ruby-keyword kw">else</span>&#x000A;      <span class="ruby-identifier">args</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">win</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;myWin = Windows.getWindowByName('#{escape_javascript(win.to_s)}');&quot;</span>&#x000A;        <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;if(myWin){ myWin.refresh(); }&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000026-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 365</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">refresh_window</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)&#x000A;  <span class="ruby-keyword kw">return</span>&#x000A;    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;var myWin = null;&quot;</span>&#x000A;    <span class="ruby-keyword kw">if</span>(<span class="ruby-identifier">args</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">:all</span>))&#x000A;      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;Windows.windows.values().each(function(win){ win.refresh(); });&quot;</span>&#x000A;    <span class="ruby-keyword kw">else</span>&#x000A;      <span class="ruby-identifier">args</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">win</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;myWin = Windows.getWindowByName('#{escape_javascript(win.to_s)}');&quot;</span>&#x000A;        <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;if(myWin){ myWin.refresh(); }&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000019'>
-                <a name='M000019'></a>
+              <div class='method public-instance' id='method-M000021'>
+                <a name='M000021'></a>
                 <div class='synopsis'>
                   <span class='name'>show_window</span>
                   <span class='arguments'>(win, modal)</span>
@@ -437,32 +463,32 @@
                   <p>
                   Shows the window centered on the screen. If no window name is provided it
                   will default to the last created window. Generally this should not be
-                  called, rather <a href="WindowRailsGenerators.html#M000021">open_window</a>
-                  should be used
+                  called, rather <a href="WindowRailsGenerators.html#M000022">open_window</a>
+                  should be used NOTE: No modal mode currently
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000019-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000021-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000019-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 115</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">show_window</span>(<span class="ruby-identifier">win</span>, <span class="ruby-identifier">modal</span>)&#x000A;    <span class="ruby-identifier">s</span> = <span class="ruby-keyword kw">nil</span>&#x000A;    <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">win</span>.<span class="ruby-identifier">blank?</span>)&#x000A;      <span class="ruby-identifier">s</span> = <span class="ruby-node">&quot;Windows.getWindowByName('#{escape_javascript(win)}')&quot;</span>&#x000A;    <span class="ruby-keyword kw">else</span>&#x000A;      <span class="ruby-identifier">s</span> = <span class="ruby-value str">'Windows.windows.values().last()'</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;#{s}.showCenter(#{modal ? 'true' : 'false'});&quot;</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000021-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 247</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">show_window</span>(<span class="ruby-identifier">win</span>, <span class="ruby-identifier">modal</span>)&#x000A;    <span class="ruby-identifier">modal</span> <span class="ruby-operator">||=</span> <span class="ruby-keyword kw">false</span>&#x000A;    <span class="ruby-identifier">check_for_window</span>(<span class="ruby-identifier">win</span>) <span class="ruby-keyword kw">do</span>&#x000A;      <span class="ruby-identifier">window</span>(<span class="ruby-identifier">win</span>) <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;.dialog('option', 'modal', #{format_type_to_js(modal)});&quot;</span>&#x000A;      <span class="ruby-identifier">window</span>(<span class="ruby-identifier">win</span>) <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;.dialog('option', 'autoOpen', true);&quot;</span>&#x000A;      <span class="ruby-identifier">window</span>(<span class="ruby-identifier">win</span>) <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">'.dialog(&quot;open&quot;);'</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">nil</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000022'>
-                <a name='M000022'></a>
+              <div class='method public-instance' id='method-M000023'>
+                <a name='M000023'></a>
                 <div class='synopsis'>
                   <span class='name'>store_content</span>
-                  <span class='arguments'>(content)</span>
+                  <span class='arguments'>(content, key=nil)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000022-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000023-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000022-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 198</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_content</span>(<span class="ruby-identifier">content</span>)&#x000A;    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;if(typeof(window_rails_contents) == 'undefined'){ var window_rails_contents = new Hash(); }&quot;</span>&#x000A;    <span class="ruby-identifier">key</span> = <span class="ruby-identifier">rand</span>.<span class="ruby-identifier">to_s</span>&#x000A;    <span class="ruby-identifier">key</span>.<span class="ruby-identifier">slice!</span>(<span class="ruby-value">0</span>,<span class="ruby-value">2</span>)&#x000A;    <span class="ruby-identifier">c</span> = <span class="ruby-identifier">content</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">render</span>(<span class="ruby-identifier">content</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">content</span>.<span class="ruby-identifier">to_s</span>&#x000A;    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;window_rails_contents.set('#{key}', '#{escape_javascript(c)}')&quot;</span>&#x000A;    <span class="ruby-identifier">key</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000023-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 321</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_content</span>(<span class="ruby-identifier">content</span>, <span class="ruby-identifier">key</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;    <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">key</span>)&#x000A;      <span class="ruby-identifier">key</span> = <span class="ruby-identifier">rand</span>.<span class="ruby-identifier">to_s</span>&#x000A;      <span class="ruby-identifier">key</span>.<span class="ruby-identifier">slice!</span>(<span class="ruby-value">0</span>,<span class="ruby-value">2</span>)&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-identifier">c</span> = <span class="ruby-identifier">content</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>) <span class="ruby-operator">?</span> <span class="ruby-ivar">@context</span>.<span class="ruby-identifier">render</span>(<span class="ruby-identifier">content</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">content</span>.<span class="ruby-identifier">to_s</span>&#x000A;    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;if(typeof(window.window_rails_contents) == 'undefined'){ window.window_rails_contents = {}; }&quot;</span>&#x000A;    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;window.window_rails_contents[#{format_type_to_js(key.to_s)}] = #{format_type_to_js(c)};&quot;</span>&#x000A;    <span class="ruby-identifier">key</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000012'>
-                <a name='M000012'></a>
+              <div class='method public-instance' id='method-M000011'>
+                <a name='M000011'></a>
                 <div class='synopsis'>
                   <span class='name'>update_info_window</span>
                   <span class='arguments'>(msg)</span>
@@ -473,21 +499,21 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000012-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000011-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000012-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 36</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_info_window</span>(<span class="ruby-identifier">msg</span>)&#x000A;    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;Dialog.setInfoMessage('#{escape_javascript(msg)}');&quot;</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000011-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 88</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_info_window</span>(<span class="ruby-identifier">msg</span>)&#x000A;    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">'jQuery(&quot;#information_modal&quot;).html(#{format_type_to_js(msg)});'</span>&#x000A;    <span class="ruby-keyword kw">nil</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-M000013'>
-                <a name='M000013'></a>
+              <div class='method public-instance' id='method-M000014'>
+                <a name='M000014'></a>
                 <div class='synopsis'>
                   <span class='name'>update_window</span>
-                  <span class='arguments'>(key, options={})</span>
+                  <span class='arguments'>(content, options={})</span>
                 </div>
                 <div class='description'>
                   <table>
-                  <tr><td valign="top">key:</td><td>Key of updated contents
+                  <tr><td valign="top">content:</td><td>content
                   
                   </td></tr>
                   <tr><td valign="top">options:</td><td>Hash of options
@@ -504,17 +530,17 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000013-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000014-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000013-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 48</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_window</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">options</span>={})&#x000A;    <span class="ruby-identifier">win</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:window</span>)&#x000A;    <span class="ruby-identifier">error</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:error</span>)&#x000A;    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">check_for_window</span>(<span class="ruby-identifier">win</span>, <span class="ruby-identifier">error</span>){ <span class="ruby-identifier">update_window_contents</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">win</span>) }&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000014-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 128</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_window</span>(<span class="ruby-identifier">content</span>, <span class="ruby-identifier">options</span>={})&#x000A;    <span class="ruby-identifier">win</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:window</span>)&#x000A;    <span class="ruby-identifier">error</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:error</span>)&#x000A;    <span class="ruby-identifier">key</span> = <span class="ruby-identifier">store_content</span>(<span class="ruby-identifier">content</span>)&#x000A;    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">check_for_window</span>(<span class="ruby-identifier">win</span>, <span class="ruby-identifier">error</span>){ <span class="ruby-identifier">update_window_contents</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">win</span>, <span class="ruby-identifier">options</span>) }&#x000A;    <span class="ruby-keyword kw">nil</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-M000016'>
                 <a name='M000016'></a>
                 <div class='synopsis'>
                   <span class='name'>update_window_contents</span>
-                  <span class='arguments'>(key, win=nil)</span>
+                  <span class='arguments'>(key, win, options)</span>
                 </div>
                 <div class='description'>
                   <table>
@@ -534,7 +560,33 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000016-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000016-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 80</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_window_contents</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">win</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;    <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">win</span>.<span class="ruby-identifier">blank?</span>)&#x000A;      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;Windows.getWindowByName('#{escape_javascript(win)}').setHTMLContent(window_rails_contents.get('#{key}'));&quot;</span>&#x000A;    <span class="ruby-keyword kw">else</span>&#x000A;      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;Windows.windows.values().last().setHTMLContent(window_rails_contents.get('#{key}'));&quot;</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000016-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 159</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_window_contents</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">win</span>, <span class="ruby-identifier">options</span>)&#x000A;    <span class="ruby-identifier">window</span>(<span class="ruby-identifier">win</span>) <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;.html(window.window_rails_contents[#{format_type_to_js(key.to_s)}]);&quot;</span>&#x000A;    <span class="ruby-keyword kw">nil</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000013'>
+                <a name='M000013'></a>
+                <div class='synopsis'>
+                  <span class='name'>window</span>
+                  <span class='arguments'>(dom_id)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000013-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000013-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 108</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">window</span>(<span class="ruby-identifier">dom_id</span>)&#x000A;    <span class="ruby-identifier">window_setup</span>&#x000A;    <span class="ruby-keyword kw">unless</span>(<span class="ruby-identifier">dom_id</span>.<span class="ruby-identifier">blank?</span>)&#x000A;      <span class="ruby-identifier">dom_id</span> = <span class="ruby-identifier">dom_id</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">dup</span>&#x000A;      <span class="ruby-identifier">dom_id</span>.<span class="ruby-identifier">slice!</span>(<span class="ruby-value">0</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">dom_id</span>.<span class="ruby-identifier">start_with?</span>(<span class="ruby-value str">'#'</span>)&#x000A;      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;window.window_rails_windows['#{dom_id}']&quot;</span>&#x000A;    <span class="ruby-keyword kw">else</span>&#x000A;      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;window.window_rails_windows[window.window_rails_windows_array[0]]&quot;</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">self</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000012'>
+                <a name='M000012'></a>
+                <div class='synopsis'>
+                  <span class='name'>window_setup</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000012-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000012-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_generators.rb, line 93</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">window_setup</span>&#x000A;    <span class="ruby-ivar">@set</span> <span class="ruby-operator">||=</span> <span class="ruby-keyword kw">false</span>&#x000A;    <span class="ruby-keyword kw">unless</span>(<span class="ruby-ivar">@set</span>)&#x000A;      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">'&#x000A;        if(typeof(window.window_rails_windows) == &quot;undefined&quot;) {&#x000A;          window.window_rails_windows = {};&#x000A;        } if(typeof(window_rails_windows_array) == &quot;undefined&quot;) {&#x000A;          window.window_rails_windows_array = new Array();&#x000A;        }&#x000A;        '</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-ivar">@set</span> = <span class="ruby-keyword kw">true</span>&#x000A;    <span class="ruby-keyword kw">nil</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

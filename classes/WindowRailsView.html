@@ -41,17 +41,18 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000007">link_to_window</a></li>
+              <li><a href="#M000004">link_to_window</a></li>
+              <li><a href="#M000005">open_window</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='method public-instance' id='method-M000007'>
-                <a name='M000007'></a>
+              <div class='method public-instance' id='method-M000004'>
+                <a name='M000004'></a>
                 <div class='synopsis'>
                   <span class='name'>link_to_window</span>
-                  <span class='arguments'>(name, options={})</span>
+                  <span class='arguments'>(name, options={}, html_opts={})</span>
                 </div>
                 <div class='description'>
                   <table>
@@ -72,10 +73,34 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000007-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000004-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000007-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_view.rb, line 10</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">link_to_window</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>={})&#x000A;    <span class="ruby-identifier">link_to_remote</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">:url</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-identifier">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:window_rails</span>, <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:open_window</span>, <span class="ruby-identifier">:window_url</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">url_for</span>(<span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:url</span>)), <span class="ruby-identifier">:iframe_url</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">url_for</span>(<span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:iframe</span>)), <span class="ruby-identifier">:window_options</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>})&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000004-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_view.rb, line 10</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">link_to_window</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>={}, <span class="ruby-identifier">html_opts</span>={})&#x000A;    <span class="ruby-identifier">frame_url</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">:iframe</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">url_for</span>(<span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:iframe</span>)) <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span>&#x000A;    <span class="ruby-identifier">window_url</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">:url</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">url_for</span>(<span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:url</span>)) <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span>&#x000A;    <span class="ruby-identifier">link_to_remote</span>(&#x000A;      <span class="ruby-identifier">name</span>, {<span class="ruby-identifier">:url</span> =<span class="ruby-operator">&gt;</span> &#x000A;      <span class="ruby-identifier">open_window_path</span>(&#x000A;        <span class="ruby-identifier">:window_url</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">window_url</span>,&#x000A;        <span class="ruby-identifier">:iframe_url</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">frame_url</span>,&#x000A;        <span class="ruby-identifier">:window_options</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>&#x000A;      )},&#x000A;      <span class="ruby-identifier">html_opts</span>&#x000A;    )&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-M000005'>
+                <a name='M000005'></a>
+                <div class='synopsis'>
+                  <span class='name'>open_window</span>
+                  <span class='arguments'>(options={})</span>
+                </div>
+                <div class='description'>
+                  <table>
+                  <tr><td valign="top">options:</td><td>Options hash supplied to windowing system
+                  
+                  </td></tr>
+                  </table>
+                  <p>
+                  Extra options include :method and :delay. :delay is the number of seconds
+                  to wait after page load to open window
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000005-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000005-source'><span class="ruby-comment cmt"># File lib/window_rails/window_rails_view.rb, line 27</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">open_window</span>(<span class="ruby-identifier">options</span>={})&#x000A;    <span class="ruby-identifier">frame_url</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">:iframe</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">url_for</span>(<span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:iframe</span>)) <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span>&#x000A;    <span class="ruby-identifier">window_url</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">:url</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">url_for</span>(<span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:url</span>)) <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span>&#x000A;    <span class="ruby-identifier">method</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:method</span>) <span class="ruby-operator">||</span> <span class="ruby-value str">'get'</span>&#x000A;    <span class="ruby-identifier">delay</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:delay</span>) <span class="ruby-operator">||</span> <span class="ruby-value">0</span><span class="ruby-value">.5</span>&#x000A;    <span class="ruby-identifier">delay</span> = <span class="ruby-identifier">delay</span> <span class="ruby-operator">*</span> <span class="ruby-value">1000</span>&#x000A;    <span class="ruby-identifier">url</span> = <span class="ruby-identifier">open_window_path</span>(&#x000A;      <span class="ruby-identifier">:window_url</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">window_url</span>,&#x000A;      <span class="ruby-identifier">:iframe_url</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">frame_url</span>,&#x000A;      <span class="ruby-identifier">:window_options</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>&#x000A;    ).<span class="ruby-identifier">html_safe</span>&#x000A;    <span class="ruby-identifier">javascript_tag</span>{&#x000A;      <span class="ruby-node">&quot;setTimeout(function(){&#x000A;        jQuery.#{method}('#{url}');&#x000A;       }, #{delay.to_i});&quot;</span>.<span class="ruby-identifier">html_safe</span>&#x000A;    }&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

@@ -31,12 +31,43 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>Mon Jan 24 10:47:09 -0800 2011</span>
+          <span class='datetime'>Wed May 18 16:11:43 -0700 2011</span>
         </div>
       </div>
       <div id='content'>
         <div id='text'>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>public instance</h3>
+            <ol>
+              <li><a href="#M000001">install_items</a></li>
+            </ol>
+          </div>
+          <div id='context'>
+            <div id='requires'>
+              <h2>Required files</h2>
+              <ol>
+                <li>fileutils</li>
+              </ol>
+            </div>
+          </div>
           <div id='section'>
+            <div id='methods'>
+              <h2>Public instance methods</h2>
+              <div class='method public-instance' id='method-M000001'>
+                <a name='M000001'></a>
+                <div class='synopsis'>
+                  <span class='name'>install_items</span>
+                  <span class='arguments'>(item)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000001-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000001-source'><span class="ruby-comment cmt"># File lib/window_rails/tasks.rb, line 61</span>&#x000A;<span class="ruby-keyword kw">def</span> <span class="ruby-identifier">install_items</span>(<span class="ruby-identifier">item</span>)&#x000A;  <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">mkdir_p</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">Rails</span>.<span class="ruby-identifier">root</span>, <span class="ruby-value str">'public'</span>, <span class="ruby-value str">'window_rails'</span>, <span class="ruby-identifier">item</span>))&#x000A;  <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">cp_r</span>(&#x000A;    <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-keyword kw">__FILE__</span>), <span class="ruby-value str">'..'</span>, <span class="ruby-value str">'..'</span>, <span class="ruby-value str">'files'</span>, <span class="ruby-identifier">item</span>, <span class="ruby-constant">File</span><span class="ruby-operator">::</span><span class="ruby-constant">SEPARATOR</span>, <span class="ruby-value str">'.'</span>), &#x000A;    <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">Rails</span>.<span class="ruby-identifier">root</span>, <span class="ruby-value str">'public'</span>, <span class="ruby-value str">'window_rails'</span>, <span class="ruby-identifier">item</span>)&#x000A;  )&#x000A;  <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;#{item.titleize} files installed.&quot;</span>&#x000A;<span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
