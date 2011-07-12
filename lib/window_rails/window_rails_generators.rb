@@ -28,6 +28,7 @@ module WindowRailsGenerators
       nil
   end
 
+  # Closes alert window
   def close_alert_window
     self << 'jQuery("#alert_modal").dialog("close");'
     nil
@@ -148,14 +149,6 @@ module WindowRailsGenerators
     yield if block_given?
     self << "}"
     self << "else { alert('Unexpected error. Failed to locate window for output.'); }" if error
-    nil
-  end
-  
-  # Simply wraps a block within an else statement
-  def else_block
-    self << "else {"
-    yield if block_given?
-    self << "}"
     nil
   end
   
@@ -368,6 +361,7 @@ module WindowRailsGenerators
   # args:: List of window names to refresh (All will be refreshed if :all is included)
   # Refresh window contents
   # NOTE: Currently does nothing
+  # NOTE: Deprecated (remaining temporarily for compatibility reasons)
   def refresh_window(*args)
   return
     self << "var myWin = null;"
@@ -386,7 +380,8 @@ module WindowRailsGenerators
   # Helper for observing fields that have been dynamically loaed into the DOM. Works like
   # #observe_field but not as full featured. 
   # NOTE: Currently does nothing
-  def observe_dynamically_loaded_field(field_id, options={})
+  # NOTE: Deprecated (remaining temporarily for compatibility reasons)
+  def observe_dynamically_loaded_field(field_id, options={}) # :nodoc
   return
     f = options.delete(:function)
     unless(f)
@@ -396,6 +391,16 @@ module WindowRailsGenerators
     end
     self << "if($('#{escape_javascript(field_id.to_s)}')){ $('#{escape_javascript(field_id.to_s)}').observe('change', #{f}); }"
   end
-  
+
+  private
+
+  # Simply wraps a block within an else statement
+  def else_block
+    self << "else {"
+    yield if block_given?
+    self << "}"
+    nil
+  end
+
 end
 ActionView::Helpers::PrototypeHelper::JavaScriptGenerator::GeneratorMethods.send :include, WindowRailsGenerators
