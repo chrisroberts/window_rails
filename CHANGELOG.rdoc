@@ -1,3 +1,6 @@
+== v0.2.0
+* Rebuild off jquery-ui dialogs
+
 == v0.1.4
 * Fix to #update_window method to accept content not key
 

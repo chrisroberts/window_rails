@@ -1,33 +1,26 @@
-== WindowRails
+== WindowRails (for jQuery)
 
 WindowRails is a plugin for Rails that provides easy to use AJAXy windows. It is based
-completely on {Prototype Window}[http://prototype-window.xilinus.com/] with helpers for
-Rails to make it easy to use from a Rails app.
+completely on {jquery-ui}[http://jquery-ui.com] and the [jQuery Window Plugin}[http://fstoke.me/jquery/window/]
+with helpers for Rails to make it easy to use from a Rails app.
 
-== Configuration
+== Requirements
 
-After install, add these in the head of your application.html.erb file:
+* jQuery
+* jQuery-UI with Dialog widget enabled
 
-  <%= javascript_include_tag 'window_rails/window' %>
-  <%= stylesheet_link_tag *%w(/themes/alphacube /themes/default /themes/alert) %>
-  
-Alphacube is the default theme used by window_rails. Be sure to add the css link if you plan on using other themes.
-
-=== Gem based installs
-
-Gem based installs (bundler) will need to run the install task. For rails versions < 3 the task
-must be added to the Rakefile:
-
-  require 'window_rails/tasks'
-
-Then run the install:
+== Installation
 
   rake window_rails:install
 
 === Basic examples to get you started
 
 ==== Linking to a window
-  <%= link_to_window('Link', :url => {:controller => :my_controller, :action => :my_action}, :modal => true, :className => 'alphacube', :window => 'some_name') %>
+===== Load an entire HTML page into an IFrame
+  <%= link_to_window('Link', :iframe => {:controller => :my_controller, :action => :my_action}, :window => 'some_name') %>
+
+===== Load a partial page directly into the DOM within the window
+  <%= link_to_window('Link', :url => {:controller => :my_controller, :action => :my_action}, :width => 400, :height => 300, :window => 'some_name') %>
   
 ==== Opening a window via AJAX
   def open_my_window
@@ -35,7 +28,7 @@ Then run the install:
       format.html
       format.js do
         render :update do |page|
-          page.open_window({:partial => 'my_partial'}, :modal => true, :width => 400, :height => 200, :window => 'my_window')
+          page.open_window({:partial => 'my_partial'}, :width => 400, :height => 200, :window => 'my_window')
         end
       end
     end
@@ -73,11 +66,6 @@ Then run the install:
 
 {Issues}[http://github.com/chrisroberts/window_rails/issues]
 
-== Thanks
-
-* Many thanks to Sébastien Gruhier (creator of {Prototype Window}[http://prototype-window.xilinus.com/])
-
 == License
 
-* Prototype Window was released under the MIT license
-* WindowRails continues on under the MIT license
+* WindowRails is released under an MIT license

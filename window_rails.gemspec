@@ -9,8 +9,8 @@ Gem::Specification.new do |s|
   s.homepage = 'http://github.com/chrisroberts/window_rails'
   s.description = 'Windows for Rails'
   s.require_path = 'lib'
-  s.has_rdoc = true
   s.extra_rdoc_files = ['README.rdoc', 'LICENSE', 'CHANGELOG.rdoc']
   s.add_dependency 'rails', '>= 2.3'
-  s.files = %w(LICENSE README.rdoc CHANGELOG.rdoc init.rb install.rb uninstall.rb) + Dir.glob("{app,files,lib,rails}/**/*")
+  s.add_dependency 'rails_javascript_helpers', '~> 1.0'
+  s.files = %w(LICENSE README.rdoc CHANGELOG.rdoc) + Dir.glob("{app,files,lib,rails}/**/*")
 end
