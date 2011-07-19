@@ -1,3 +1,6 @@
+== v0.2.1
+* Enable #observe_dynamically_loaded_field for compatibility (outputs prototype)
+
 == v0.2.0
 * Rebuild off jquery-ui dialogs
 

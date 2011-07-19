@@ -382,7 +382,6 @@ module WindowRailsGenerators
   # NOTE: Currently does nothing
   # NOTE: Deprecated (remaining temporarily for compatibility reasons)
   def observe_dynamically_loaded_field(field_id, options={}) # :nodoc
-  return
     f = options.delete(:function)
     unless(f)
       f = "function(event){ new Ajax.Request('#{escape_javascript(@context.url_for(options[:url]).to_s)}', {asynchronous:true, evalScripts:true,parameters:'#{escape_javascript(options[:with].to_s)}='+$('#{escape_javascript(options[:with].to_s)}').getValue()})}"
