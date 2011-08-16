@@ -334,11 +334,11 @@ module WindowRailsGenerators
   # Close the window of the provided name or the last opened window
   def close_window(options = {})
     win_name = if(options.is_a?(Hash))
-      (options[:window] || options[:name]).to_s
+      [(options[:window] || options[:name]).to_s]
     elsif(options.is_a?(Array))
       options.map(&:to_s)
     else
-      options.to_s
+      [options.to_s]
     end
     win_name.each do |win|
       window(win) << '.dialog("close");'
