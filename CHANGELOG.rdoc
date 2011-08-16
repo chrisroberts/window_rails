@@ -1,3 +1,6 @@
+== v0.2.2
+* Fix bug in #close_window
+
 == v0.2.1
 * Enable #observe_dynamically_loaded_field for compatibility (outputs prototype)
 
