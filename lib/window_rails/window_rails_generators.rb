@@ -185,6 +185,9 @@ module WindowRailsGenerators
   # options:: Options to be passed onto window
   # Creates a new window. Generally this should not be called,
   # rather #open_window should be used
+  # TODO: The below line causes an error in IE. Fix up to be compatible
+  # so we aren't storing worthless junk:
+  # window.window_rails_windows_array.splice(window.window_rails_windows_array.indexOf('#{win}'), 1);
   def create_window(key, win, options)
     options[:auto_open] ||= false
     options[:close] = "function(event,ui){ 
@@ -195,7 +198,6 @@ module WindowRailsGenerators
       }
       jQuery('##{win}').dialog('destroy'); 
       window.window_rails_windows['#{win}'] = null;
-      window.window_rails_windows_array.splice(window.window_rails_windows_array.indexOf('#{win}'), 1);
       jQuery('##{win}').remove();
     }"
     unless(win.is_a?(String))
