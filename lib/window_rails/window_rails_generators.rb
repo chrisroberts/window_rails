@@ -186,7 +186,11 @@ module WindowRailsGenerators
   def auto_resize(win, extra_padding, *args)
     win = win.start_with?('#') ? win : "##{win}"
     args.each do |item|
-      window(win) << ".dialog('option', '#{item}', jQuery('#{win}_wr_content').#{item}() + #{extra_padding.to_i});"
+      self << "
+        if(jQuery('#{win}').#{item}() < jQuery('#{win}_wr_content').#{item}() || jQuery('#{win}').#{item}() > jQuery('#{win}_wr_content').#{item}() + #{extra_padding.to_i}){"
+          window(win) << ".dialog('option', '#{item}', jQuery('#{win}_wr_content').#{item}() + #{extra_padding.to_i});"
+      self << "
+        }"
     end
   end
 
