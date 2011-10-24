@@ -156,15 +156,44 @@ module WindowRailsGenerators
   # win:: Name of window
   # Updates the contents of the window. If no window name is provided, the topmost window
   # will be updated
-  def update_window_contents(key, win, options)
-    window(win) << ".html(window.window_rails_contents[#{format_type_to_js(key.to_s)}]);"
-    nil
+  def update_window_contents(key, win, options=nil)
+    window(win) << ".html('<div id=\"#{win}_wr_content\">' + window.window_rails_contents[#{format_type_to_js(key.to_s)}] + '</div>');"
+  end
+
+  # win:: Name of window
+  # padding:: Extra padding to add to calculated height and width
+  def resize_to_fit(win, padding=75)
+    if(padding.is_a?(Hash))
+      w_pad = padding[:width_pad]
+      h_pad = padding[:height_pad]
+    else
+      w_pad = h_pad = padding
+    end
+    auto_resize(win, h_pad, :height)
+    auto_resize(win, w_pad, :width)
+    center_window(win)
+  end
+
+  # win:: Name of window
+  # Recenters window
+  def center_window(win)
+    window(win) << ".dialog('option', 'position', 'center');"
+  end
+
+  # win:: Name of window
+  # extra_padding:: Extra padding to add to calculated size
+  # args:: Symbols for what to resize. Valid: :height and :width
+  def auto_resize(win, extra_padding, *args)
+    win = win.start_with?('#') ? win : "##{win}"
+    args.each do |item|
+      window(win) << ".dialog('option', '#{item}', jQuery('#{win}_wr_content').#{item}() + #{extra_padding.to_i});"
+    end
   end
 
   # win:: Name of window
   # Will focus the window. If no name provided, topmost window will be focused
   def focus_window(win=nil)
-    window(win) << '.dialog("focus");'
+    window(win) << '.dialog().dialog("focus");'
     nil
   end
 
@@ -223,19 +252,16 @@ module WindowRailsGenerators
         jQuery.get(
           '#{options.delete(:url)}',
           function(data){
-            window.window_rails_windows['#{win}']
+            jQuery('##{win}_wr_content')
               .html(data)
                 .dialog(#{format_type_to_js(options)})
                   .dialog('open');
           }
-        );
+        )
       "
     else
-      self << "
-        window.window_rails_windows['#{win}']
-          .html(window.window_rails_contents['#{key}'])
-            .dialog(#{format_type_to_js(options)});
-      "
+      window(win) << ".dialog(#{format_type_to_js(options)});"
+      update_window_contents(key, win)
     end
     nil
   end
