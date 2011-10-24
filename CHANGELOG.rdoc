@@ -1,3 +1,6 @@
+== v0.2.4
+* Add #resize_to_fit, #auto_resize and #center_window methods
+
 == v0.2.3
 * Add config directory to gemspec
 * Provide Rails 3 compatible routing
