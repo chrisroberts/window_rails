@@ -187,7 +187,7 @@ module WindowRailsGenerators
     win = win.start_with?('#') ? win : "##{win}"
     args.each do |item|
       self << "
-        if(jQuery('#{win}').#{item}() < jQuery('#{win}_wr_content').#{item}() || jQuery('#{win}').#{item}() > jQuery('#{win}_wr_content').#{item}() + #{extra_padding.to_i}){"
+        if(jQuery('#{win}').#{item}() + #{extra_padding.to_i} < jQuery('#{win}_wr_content').#{item}() || jQuery('#{win}').#{item}() > jQuery('#{win}_wr_content').#{item}() + #{extra_padding.to_i}){"
           window(win) << ".dialog('option', '#{item}', jQuery('#{win}_wr_content').#{item}() + #{extra_padding.to_i});"
       self << "
         }"
