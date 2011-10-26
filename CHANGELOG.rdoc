@@ -1,3 +1,6 @@
+== v0.2.5
+* Better height/width determination for resize methods
+
 == v0.2.4
 * Add #resize_to_fit, #auto_resize and #center_window methods
 
