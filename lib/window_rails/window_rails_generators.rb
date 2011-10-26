@@ -162,7 +162,7 @@ module WindowRailsGenerators
 
   # win:: Name of window
   # padding:: Extra padding to add to calculated height and width
-  def resize_to_fit(win, padding=75)
+  def resize_to_fit(win, padding=20)
     if(padding.is_a?(Hash))
       w_pad = padding[:width_pad]
       h_pad = padding[:height_pad]
@@ -187,8 +187,9 @@ module WindowRailsGenerators
     win = win.start_with?('#') ? win : "##{win}"
     args.each do |item|
       self << "
-        if(jQuery('#{win}').#{item}() + #{extra_padding.to_i} < jQuery('#{win}_wr_content').#{item}() || jQuery('#{win}').#{item}() > jQuery('#{win}_wr_content').#{item}() + #{extra_padding.to_i}){"
-          window(win) << ".dialog('option', '#{item}', jQuery('#{win}_wr_content').#{item}() + #{extra_padding.to_i});"
+        var _wr_max = Math.max.apply(Math, jQuery('#{win}_wr_content *').map(function(){ return jQuery(this).#{item}(); }).get());
+        if(jQuery('#{win}').#{item}() < _wr_max || jQuery('#{win}').#{item}() > _wr_max){"
+          window(win) << ".dialog('option', '#{item}', _wr_max + #{extra_padding.to_i});"
       self << "
         }"
     end
