@@ -246,7 +246,7 @@ module WindowRailsGenerators
         jQuery('body').append('<div id=\"window_rails_windows\" style=\"visibility:hidden;display:none;\"></div>');
       }
       if(jQuery('##{win}').size() == 0){
-        jQuery('#window_rails_windows').append('<div id=\"#{win}\"></div>');
+        jQuery('#window_rails_windows').append('<div id=\"#{win}\"><div id=\"#{win}_wr_content\"></div></div>');
       }
       window.window_rails_windows['#{win}'] = jQuery('##{win}');
       window.window_rails_windows_array.push('#{win}');
@@ -261,7 +261,8 @@ module WindowRailsGenerators
               .html(data)
                 .dialog(#{format_type_to_js(options)})
                   .dialog('open');
-          }
+          },
+          'script'
         )
       "
     else
