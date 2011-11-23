@@ -1,3 +1,6 @@
+== v0.2.6
+* Fixes for #link_to_window
+
 == v0.2.5
 * Better height/width determination for resize methods
 
