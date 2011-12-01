@@ -1,3 +1,6 @@
+== v0.2.7
+* Remove content holder element after window has been closed to prevent orphaned content
+
 == v0.2.6
 * Fixes for #link_to_window
 
