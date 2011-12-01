@@ -233,6 +233,7 @@ module WindowRailsGenerators
       jQuery('##{win}').dialog('destroy'); 
       window.window_rails_windows['#{win}'] = null;
       jQuery('##{win}').remove();
+      jQuery('##{win}_wr_content').remove();
     }"
     unless(win.is_a?(String))
       win = win.to_s
