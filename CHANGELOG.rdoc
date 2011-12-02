@@ -1,3 +1,6 @@
+== v0.2.8
+* Request content as HTML when loading window
+
 == v0.2.7
 * Remove content holder element after window has been closed to prevent orphaned content
 
