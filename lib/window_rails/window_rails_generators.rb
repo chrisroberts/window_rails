@@ -263,7 +263,7 @@ module WindowRailsGenerators
                 .dialog(#{format_type_to_js(options)})
                   .dialog('open');
           },
-          'script'
+          'html'
         )
       "
     else
