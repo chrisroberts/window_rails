@@ -105,16 +105,21 @@ module WindowRailsGenerators
     nil
   end
 
-  def window(dom_id)
+  def window(dom_id, *args)
     window_setup
     unless(dom_id.blank?)
       dom_id = dom_id.to_s.dup
       dom_id.slice!(0) if dom_id.start_with?('#')
-      self << "window.window_rails_windows['#{dom_id}']"
+      output = "window.window_rails_windows['#{dom_id}']"
     else
-      self << "window.window_rails_windows[window.window_rails_windows_array[0]]"
+      output = "window.window_rails_windows[window.window_rails_windows_array[0]]"
     end
-    self
+    if(args.include?(:raw))
+      output
+    else
+      self << output
+      self
+    end
   end
 
   # content:: content
@@ -376,7 +381,7 @@ module WindowRailsGenerators
       [options.to_s]
     end
     win_name.each do |win|
-      window(win) << '.dialog("close");'
+      self << check_for_window(win, false){ "#{window(win, :raw)}.dialog('close');"}
     end
   end
   
