@@ -1,3 +1,7 @@
+== v0.2.9
+* Let #window return raw string when passed :raw argument
+* Check for window before attempting to close a window
+
 == v0.2.8
 * Request content as HTML when loading window
 
