@@ -13,5 +13,5 @@ module WindowRails
     end
   end
 
-  VERSION = Version.new('0.2.9')
+  VERSION = Version.new('0.2.10')
 end
