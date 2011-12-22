@@ -381,7 +381,7 @@ module WindowRailsGenerators
       [options.to_s]
     end
     win_name.each do |win|
-      self << check_for_window(win, false){ "#{window(win, :raw)}.dialog('close');"}
+      self << check_for_window(win, false){ self << "#{window(win, :raw)}.dialog('close');"}
     end
   end
   
