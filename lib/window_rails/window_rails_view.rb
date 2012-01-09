@@ -24,7 +24,7 @@ module WindowRailsView
   # options:: Options hash supplied to windowing system
   # Extra options include :method and :delay. :delay is the number
   # of seconds to wait after page load to open window
-  def open_window(options={})
+  def open_window_deprecated(options={})
     frame_url = options.has_key?(:iframe) ? url_for(options.delete(:iframe)) : nil
     window_url = options.has_key?(:url) ? url_for(options.delete(:url)) : nil
     method = options.delete(:method) || 'get'
