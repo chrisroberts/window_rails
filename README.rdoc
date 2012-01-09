@@ -4,7 +4,7 @@ WindowRails is a plugin for Rails that provides easy to use AJAXy windows. It is
 completely on {jQueryUI}[http://jquery-ui.com] with helpers for Rails to make it easy to 
 use from a Rails app.
 
-WindowRails is now happily compatible with Rails 2 and Rails 3.
+WindowRails is now happily compatible with Rails 2 and Rails 3 (and now 3.1).
 
 == Requirements
 
@@ -13,7 +13,9 @@ WindowRails is now happily compatible with Rails 2 and Rails 3.
 
 == Installation
 
-  rake window_rails:install
+Add window_rails to your application Gemfile:
+
+  gem 'window_rails'
 
 === Basic examples to get you started
 
@@ -42,19 +44,23 @@ WindowRails is now happily compatible with Rails 2 and Rails 3.
     end
   end
 
-==== Linking to a window
-===== Load an entire HTML page into an IFrame
-  <%= link_to_window('Link', :iframe => {:controller => :my_controller, :action => :my_action}, :window => 'some_name') %>
+  # or via JS template:
+  # app/views/my_resources/action.js.erb
 
-With this approach the contents of the HTML respond to block will be loaded into the window
-
-===== Load a partial page directly into the DOM within the window
-  <%= link_to_window('Link', :url => {:controller => :my_controller, :action => :my_action}, :width => 400, :height => 300, :window => 'some_name') %>
-
-With this approach the content returned from the JS respond to block will be loaded into the window. No need for
-requesting the window to be created from the controller.
+  <%=
+    page.open_window(
+      {:partial => 'action_partial'},
+      :width => 400,
+      :height => 500,
+      :title => 'My Window',
+      :window => 'unique_window_name'
+    )
+  %>
 
 == Window Interactions
+
+Examples are shown using the old generator style. For rails 3.1 and beyond, the methods should be defined
+within the JS views
 
 ==== Opening a window via AJAX
   def open_my_window
