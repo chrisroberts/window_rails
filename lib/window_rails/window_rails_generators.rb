@@ -228,6 +228,7 @@ module WindowRailsGenerators
   # so we aren't storing worthless junk:
   # window.window_rails_windows_array.splice(window.window_rails_windows_array.indexOf('#{win}'), 1);
   def create_window(key, win, options)
+    window_setup
     options[:auto_open] ||= false
     options[:close] = "function(event,ui){ 
       #{
