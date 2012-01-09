@@ -48,7 +48,7 @@ Add window_rails to your application Gemfile:
   # app/views/my_resources/action.js.erb
 
   <%=
-    page.open_window(
+    open_window(
       {:partial => 'action_partial'},
       :width => 400,
       :height => 500,
