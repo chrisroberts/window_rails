@@ -1,3 +1,7 @@
+== v0.2.11
+* Provides windowing methods to ActionView::Base for JS templates
+* Removes deprecated rake tasks
+
 == v0.2.10
 * Fixes close window bug
 
