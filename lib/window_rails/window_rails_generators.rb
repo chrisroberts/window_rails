@@ -131,6 +131,7 @@ module WindowRailsGenerators
   # result will be placed in the window (basically an easy way to integrate partials:
   # page.update_window(:partial => 'my_parital'))
   def update_window(content, options={})
+    window_setup
     win = options.delete(:window)
     error = options.delete(:error)
     key = store_content(content)
@@ -314,6 +315,7 @@ module WindowRailsGenerators
   #   be isolated from the current page, but this isolation means it cannot communicate with other windows on the page (including
   #   its own).
   def open_window(content, options={})
+    window_setup
     key = nil
     if(options[:iframe])
       iframe = @context.url_for(options.delete(:iframe))
