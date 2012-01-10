@@ -10,7 +10,7 @@ module WindowRails
     end
 
     def << (string)
-      @buffer << string
+      @buffer << string.to_s
     end
 
     def window_flush
