@@ -1,9 +1,5 @@
 module WindowRails
   class Engine < Rails::Engine
-    
-    rake_tasks do
-      require 'window_rails/tasks'
-    end
 
     # We do all our setup in here
     config.to_prepare do
