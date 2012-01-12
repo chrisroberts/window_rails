@@ -91,7 +91,7 @@ module WindowRailsGenerators
   end
 
   def window_setup
-    @set ||= false
+    @_window_rails_setup ||= false
     unless(@set)
       self << '
         if(typeof(window.window_rails_windows) == "undefined") {
@@ -101,7 +101,7 @@ module WindowRailsGenerators
         }
         '
     end
-    @set = true
+    @_window_rails_setup = true
     nil
   end
 
