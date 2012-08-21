@@ -1,3 +1,6 @@
+== v0.2.12
+* Fixes for proper loading in Rails 3.2
+
 == v0.2.11
 * Provides windowing methods to ActionView::Base for JS templates
 * Removes deprecated rake tasks
