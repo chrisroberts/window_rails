@@ -1,3 +1,5 @@
+require 'window_rails/window_rails_generators'
+
 module WindowRails
   class Holder
     include WindowRailsGenerators
