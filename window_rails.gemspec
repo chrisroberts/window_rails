@@ -2,7 +2,7 @@ $LOAD_PATH.unshift File.expand_path(File.dirname(__FILE__)) + '/lib/'
 require 'window_rails/version'
 Gem::Specification.new do |s|
   s.name = 'window_rails'
-  s.version = WindowRails::VERSION.to_s
+  s.version = WindowRails::VERSION.version
   s.summary = 'Windows for Rails'
   s.author = 'Chris Roberts'
   s.email = 'chrisroberts.code@gmail.com'
