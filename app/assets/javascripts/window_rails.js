@@ -1,4 +1,4 @@
-var window_rails = {alert: {}, info: {}, confirm: {}, configuration: {}};
+var window_rails = {alert: {}, info: {}, confirm: {}, loading: {}, configuration: {}};
 
 /**
  * Access configuration
@@ -63,6 +63,7 @@ window_rails.create_window = function(args){
  * @param args [Hash]
  * @option args [String] :title
  * @option args [String] :content
+ * @option args [true,false] :esc_close
  **/
 window_rails.open_window = function(name, args){
   if(args){
@@ -73,8 +74,9 @@ window_rails.open_window = function(name, args){
       $(window_rails.dom_ider(name) + ' .modal-body').html(args.content);
     }
   }
+
   window_rails.window_for(name).modal({
-    keyboard: window_rails.config('default_esc_close', true),
+    keyboard: args.esc_close == undefined ? window_rails.config('default_esc_close', true) : args.esc_close,
     show: true
   });
 }
@@ -140,6 +142,26 @@ window_rails.confirm.open = function(args){
  **/
 window_rails.confirm.close = function(){
   window_rails.close_window('confirm');
+}
+
+/**
+ * Open loading window
+ *
+ * @param style [String] style of spinner (valid class in csspinner)
+ **/
+window_rails.loading.open = function(style){
+  if(!style){
+    style = 'standard';
+  }
+  window_rails.window_for('loading').find('.csspinner').attr('class', 'csspinner no-overlay ' + style);
+  window_rails.open_window('loading', {esc_close: false});
+}
+
+/**
+ * Close loading window
+ **/
+window_rails.loading.close = function(){
+  window_rails.close_window('loading');
 }
 
 /**
@@ -238,6 +260,19 @@ window_rails.init = function(){
               </div>\
               <div class="modal-footer">\
                 <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>\
+              </div>\
+            </div>\
+          </div>\
+        </div>\
+      </div>\
+        <div id="window-rails-loading" class="modal fade" role="modal" aria-labelledby="window-rails-loading" aria-hidden="true">\
+          <div class="modal-dialog modal-sm">\
+            <div class="modal-content">\
+              <div class="modal-header">\
+                <b class="modal-title">Loading...</b>\
+              </div>\
+              <div class="modal-body">\
+                <div style="height: 50px" class="csspinner no-overlay standard" />\
               </div>\
             </div>\
           </div>\
