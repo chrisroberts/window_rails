@@ -1,8 +1,4 @@
-
-
 module WindowRails
-  class Version < Gem::Version
-  end
-
-  VERSION = Version.new('0.2.12')
+  # Current library version
+  VERSION = Gem::Version.new('1.0.0')
 end
