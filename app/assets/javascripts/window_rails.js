@@ -8,7 +8,11 @@ var window_rails = {alert: {}, info: {}, confirm: {}, loading: {}, configuration
  * @return [Object]
  **/
 window_rails.config = function(key, default_value){
-  return window_rails.configuration[key] || default_value;
+  if(window_rails.configuration[key] == undefined){
+    return default_value;
+  } else {
+    return window_rails.configuration[key];
+  }
 }
 
 /**
@@ -64,6 +68,7 @@ window_rails.create_window = function(args){
  * @option args [String] :title
  * @option args [String] :content
  * @option args [true,false] :esc_close
+ * @option args [true,false] :show
  **/
 window_rails.open_window = function(name, args){
   if(args){
@@ -77,7 +82,7 @@ window_rails.open_window = function(name, args){
 
   window_rails.window_for(name).modal({
     keyboard: args.esc_close == undefined ? window_rails.config('default_esc_close', true) : args.esc_close,
-    show: true
+    show: args.show == undefined ? window_rails.config('default_open_show', true) : args.show
   });
 }
 
