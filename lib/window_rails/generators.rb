@@ -77,5 +77,32 @@ module WindowRails
       true
     end
 
+    # Open the window
+    #
+    # @param name [String] window name
+    # @return [TrueClass]
+    def open_window(name)
+      self << "window_rails.open_window('#{name}');"
+      true
+    end
+
+    # Close the window
+    #
+    # @param name [String] window name
+    # @return [TrueClass]
+    def close_window(name)
+      self << "window_rails.close_window('#{name}');"
+      true
+    end
+
+    # Update the contents of the window
+    #
+    # @option options [String] :title title of window
+    # @option options [String] :content content of window
+    # @option options [String] :footer content of footer
+    def update_window(name, options={})
+      create_window(options.merge(:name => name, :show => false))
+    end
+
   end
 end
