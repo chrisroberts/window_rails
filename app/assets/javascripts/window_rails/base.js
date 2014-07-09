@@ -175,13 +175,18 @@ window_rails.confirm.execute = function(){
     $.ajax({
       url: args.url,
       type: args.ajax.toUpperCase()
-    }).error(function(){
+    }).error(function(data, status){
       window_rails.loading.close();
+      if(args.error){
+        msg = args.error;
+      } else {
+        msg = data.responseText;
+      }
       window_rails.alert.open({
         title: args.title,
-        content: "Unexpected error encountered!"
+        content: msg
       });
-    }).success(function(){
+    }).success(function(data){
       window_rails.loading.close();
       window_rails.info.open({
         title: args.title,
@@ -205,6 +210,8 @@ window_rails.loading.open = function(style){
     if(typeof style === 'object'){
       title = style.title;
       style = style.style;
+    } else {
+      title = null;
     }
   }
   if(!style){
@@ -353,7 +360,8 @@ window_rails.hooks = function(){
       ajax: $(this).attr('window-rails-ajax'),
       url: $(this).attr('window-rails-url'),
       progress: $(this).attr('window-rails-progress'),
-      complete: $(this).attr('window-rails-complete')
+      complete: $(this).attr('window-rails-complete'),
+      error: $(this).attr('window-rails-error')
     });
   });
   $('.window-rails-confirm-cancel').on('click', function(){
