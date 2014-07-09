@@ -1,4 +1,4 @@
-var window_rails = {alert: {}, info: {}, confirm: {}, loading: {}, configuration: {}};
+var window_rails = {alert: {}, info: {}, confirm: {action: {}}, loading: {}, configuration: {}};
 
 /**
  * Access configuration
@@ -119,9 +119,16 @@ window_rails.alert.close = function(){
  * @param args [Hash]
  * @option args [String] :title
  * @option args [String] :content
+ * @option args [Integer] :auto_close close info after given seconds
  **/
 window_rails.info.open = function(args){
   window_rails.open_window('info', args);
+  if(args.auto_close){
+    setTimeout(
+      function(){ window_rails.info.close(); },
+      args.auto_close * 1000
+    )
+  }
 }
 
 /**
@@ -135,10 +142,15 @@ window_rails.info.close = function(){
  * Open confirm window
  *
  * @param args [Hash]
- * @option args [String] :title
- * @option args [String] :content
+ * @option args [String] :title content for title
+ * @option args [String] :content content for content
+ * @option args [String] :url URL to load on acceptance
+ * @option args [String] :ajax AJAX method to use (get, post, etc)
+ * @option args [String] :progress title for loading window while in progres
+ * @option args [String] :complete content for info window upon completion
  **/
 window_rails.confirm.open = function(args){
+  window_rails.confirm.action = args
   window_rails.open_window('confirm', args);
 }
 
@@ -150,16 +162,56 @@ window_rails.confirm.close = function(){
 }
 
 /**
+ * Execute defined action for confirmation
+ **/
+window_rails.confirm.execute = function(){
+  args = window_rails.confirm.action;
+  window_rails.confirm.close();
+  window_rails.confirm.action = {};
+  window_rails.loading.open({
+    title: args.progress
+  });
+  if(args.ajax){
+    $.ajax({
+      url: args.url,
+      type: args.ajax.toUpperCase()
+    }).error(function(){
+      window_rails.loading.close();
+      window_rails.alert.open({
+        title: args.title,
+        content: "Unexpected error encountered!"
+      });
+    }).success(function(){
+      window_rails.loading.close();
+      window_rails.info.open({
+        title: args.title,
+        content: args.complete || 'Action complete',
+        auto_close: window_rails.config('confirm_info_auto_close', 5)
+      });
+    });
+  } else {
+    document.location = args.url;
+  }
+}
+
+/**
  * Open loading window
  *
  * @param style [String] style of spinner (valid class in csspinner)
+ * @param title [String] title of window
  **/
 window_rails.loading.open = function(style){
+  if(style){
+    if(typeof style === 'object'){
+      title = style.title;
+      style = style.style;
+    }
+  }
   if(!style){
     style = 'standard';
   }
   window_rails.window_for('loading').find('.csspinner').attr('class', 'csspinner no-overlay ' + style);
-  window_rails.open_window('loading', {esc_close: false});
+  window_rails.open_window('loading', {esc_close: false, title: title});
 }
 
 /**
@@ -264,7 +316,8 @@ window_rails.init = function(){
                 Please confirm!\
               </div>\
               <div class="modal-footer">\
-                <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>\
+                <button type="button" class="btn btn-danger window-rails-confirm-cancel">Cancel</button>\
+                <button type="button" class="btn btn-success window-rails-confirm-ok">OK</button>\
               </div>\
             </div>\
           </div>\
@@ -284,8 +337,30 @@ window_rails.init = function(){
         </div>\
       </div>\
     ');
+    window_rails.hooks();
     window_rails.initialized = true
   }
+}
+
+/**
+ * Hook into interesting events
+ **/
+window_rails.hooks = function(){
+  $('.window-rails').on('click', function(){
+    window_rails.confirm.open({
+      title: $(this).attr('window-rails-title'),
+      content: $(this).attr('window-rails-confirm'),
+      ajax: $(this).attr('window-rails-ajax'),
+      url: $(this).attr('window-rails-url'),
+      progress: $(this).attr('window-rails-progress'),
+      complete: $(this).attr('window-rails-complete')
+    });
+  });
+  $('.window-rails-confirm-cancel').on('click', function(){
+    window_rails.confirm.action = {};
+    window_rails.confirm.close();
+  });
+  $('.window-rails-confirm-ok').on('click', window_rails.confirm.execute);
 }
 
 // Initialize once page has loaded
