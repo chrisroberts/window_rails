@@ -67,8 +67,10 @@ window_rails.create_window = function(args){
  * @param args [Hash]
  * @option args [String] :title
  * @option args [String] :content
- * @option args [true,false] :esc_close
- * @option args [true,false] :show
+ * @option args [true,false] :esc_close allow escape key window close
+ * @option args [true,false] :show show by default
+ * @option args [true,false] :backdrop show backdrop
+ * @option args [true,false] :static_backdrop do not allow backdrop click close
  **/
 window_rails.open_window = function(name, args){
   if(args){
@@ -80,9 +82,15 @@ window_rails.open_window = function(name, args){
     }
   }
 
+  backdrop = args.backdrop == undefined ? true : args.backdrop;
+  if(backdrop && args.static_backdrop){
+    backdrop = 'static';
+  }
+
   window_rails.window_for(name).modal({
     keyboard: args.esc_close == undefined ? window_rails.config('default_esc_close', true) : args.esc_close,
-    show: args.show == undefined ? window_rails.config('default_open_show', true) : args.show
+    show: args.show == undefined ? window_rails.config('default_open_show', true) : args.show,
+    backdrop: backdrop
   });
 }
 
@@ -103,6 +111,7 @@ window_rails.close_window = function(name){
  * @option args [String] :content
  **/
 window_rails.alert.open = function(args){
+  args.static_backdrop = true;
   window_rails.open_window('alert', args);
 }
 
@@ -150,7 +159,8 @@ window_rails.info.close = function(){
  * @option args [String] :complete content for info window upon completion
  **/
 window_rails.confirm.open = function(args){
-  window_rails.confirm.action = args
+  window_rails.confirm.action = args;
+  args.static_backdrop = true;
   window_rails.open_window('confirm', args);
 }
 
@@ -218,7 +228,7 @@ window_rails.loading.open = function(style){
     style = 'standard';
   }
   window_rails.window_for('loading').find('.csspinner').attr('class', 'csspinner no-overlay ' + style);
-  window_rails.open_window('loading', {esc_close: false, title: title});
+  window_rails.open_window('loading', {esc_close: false, title: title, static_backdrop: true});
 }
 
 /**
