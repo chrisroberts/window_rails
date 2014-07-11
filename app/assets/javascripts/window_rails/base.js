@@ -215,13 +215,11 @@ window_rails.confirm.execute = function(){
  * @param style [String] style of spinner (valid class in csspinner)
  * @param title [String] title of window
  **/
-window_rails.loading.open = function(style){
+window_rails.loading.open = function(style, title){
   if(style){
     if(typeof style === 'object'){
       title = style.title;
       style = style.style;
-    } else {
-      title = null;
     }
   }
   if(!style){
