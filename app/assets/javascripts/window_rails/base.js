@@ -212,7 +212,7 @@ window_rails.confirm.execute = function(){
 /**
  * Open loading window
  *
- * @param style [String] style of spinner (valid class in csspinner)
+ * @param style [String] style of spinner (valid class in csspinner or progress)
  * @param title [String] title of window
  **/
 window_rails.loading.open = function(style, title){
@@ -225,8 +225,54 @@ window_rails.loading.open = function(style, title){
   if(!style){
     style = 'standard';
   }
-  window_rails.window_for('loading').find('.csspinner').attr('class', 'csspinner no-overlay ' + style);
-  window_rails.open_window('loading', {esc_close: false, title: title, static_backdrop: true});
+  if(style == 'progress'){
+    content = '<div class="progress progress-striped active look-busy"><div class="progress-bar progress-bar-info" aria-valuemax="100" aria-valuemin="0" aria-valuenow="5" role="progressbar" style="width: 5%"></div></div>';
+  } else {
+    content = '<div style="height: 50px" class="' + style + 'csspinner no-overlay standard" />';
+  }
+  window_rails.open_window('loading', {
+    esc_close: false,
+    title: title,
+    static_backdrop: true,
+    content: content
+  });
+  if(style == 'progress'){
+    window_rails.loading.progress_look_busy();
+  }
+}
+
+/**
+ * Start progress bar busy action on loading display
+ **/
+window_rails.loading.progress_look_busy = function(){
+  $('body').data(
+    'window-rails-loading-progress',
+    window_rails.config('loading_progress_increments', 3)
+  );
+  window_rails.loading.run_look_busy();
+}
+
+/**
+ * Perform busy action
+ * @note this should generally not be called directly
+ * @see window_rails.loading.progress_look_busy
+ **/
+window_rails.loading.run_look_busy = function(){
+  setTimeout(function(){
+    elm = $('#window-rails-loading .progress-bar-info');
+    if(elm.length > 0){
+      completed = Number(elm.attr('aria-valuenow'));
+      busy_by = $('body').data('window-rails-loading-progress');
+      addition = (100 - completed) / busy_by;
+      if(busy_by < 9){
+        $('body').data('window-rails-loading-progress', busy_by / 0.75);
+      }
+      completed_now = completed + addition;
+      elm.attr('aria-valuenow', completed_now);
+      elm.attr('style', 'width: ' + completed_now + '%');
+      window_rails.loading.run_look_busy();
+    }
+  }, 2500);
 }
 
 /**
