@@ -259,6 +259,7 @@ window_rails.loading.progress_look_busy = function(){
  **/
 window_rails.loading.run_look_busy = function(){
   setTimeout(function(){
+    allowed_max = window_rails.config('loading_progress_max', 90);
     elm = $('#window-rails-loading .progress-bar-info');
     if(elm.length > 0){
       completed = Number(elm.attr('aria-valuenow'));
@@ -268,6 +269,9 @@ window_rails.loading.run_look_busy = function(){
         $('body').data('window-rails-loading-progress', busy_by / 0.75);
       }
       completed_now = completed + addition;
+      if(completed_now > allowed_max){
+        completed_now = allowed_max;
+      }
       elm.attr('aria-valuenow', completed_now);
       elm.attr('style', 'width: ' + completed_now + '%');
       window_rails.loading.run_look_busy();
