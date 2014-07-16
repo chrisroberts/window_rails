@@ -225,6 +225,9 @@ window_rails.loading.open = function(style, title){
   if(!style){
     style = 'standard';
   }
+  if(!title){
+    title = 'Loading...';
+  }
   if(style == 'progress'){
     content = '<div class="progress progress-striped active look-busy"><div class="progress-bar progress-bar-info" aria-valuemax="100" aria-valuemin="0" aria-valuenow="5" role="progressbar" style="width: 5%"></div></div>';
   } else {
