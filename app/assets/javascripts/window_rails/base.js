@@ -1,4 +1,4 @@
-var window_rails = {alert: {}, info: {}, confirm: {action: {}}, loading: {}, configuration: {}};
+var window_rails = {alert: {}, info: {}, confirm: {action: {}}, loading: {}, configuration: {}, hooks: {}};
 
 /**
  * Access configuration
@@ -405,31 +405,53 @@ window_rails.init = function(){
         </div>\
       </div>\
     ');
-    window_rails.hooks();
+    window_rails.hooks.init();
     window_rails.initialized = true
   }
 }
 
 /**
+ * Hook for displaying the confirmation window
+ **/
+window_rails.hooks.open_window = function(){
+  window_rails.confirm.open({
+    title: $(this).attr('window-rails-title'),
+    content: $(this).attr('window-rails-confirm'),
+    ajax: $(this).attr('window-rails-ajax'),
+    url: $(this).attr('window-rails-url'),
+    progress: $(this).attr('window-rails-progress'),
+    complete: $(this).attr('window-rails-complete'),
+    error: $(this).attr('window-rails-error')
+  });
+}
+
+/**
+ * Hook for closing confirm window
+ **/
+window_rails.hooks.close_confirm = function(){
+  window_rails.confirm.action = {};
+  window_rails.confirm.close();
+}
+
+/**
  * Hook into interesting events
  **/
-window_rails.hooks = function(){
-  $('.window-rails').on('click', function(){
-    window_rails.confirm.open({
-      title: $(this).attr('window-rails-title'),
-      content: $(this).attr('window-rails-confirm'),
-      ajax: $(this).attr('window-rails-ajax'),
-      url: $(this).attr('window-rails-url'),
-      progress: $(this).attr('window-rails-progress'),
-      complete: $(this).attr('window-rails-complete'),
-      error: $(this).attr('window-rails-error')
-    });
-  });
-  $('.window-rails-confirm-cancel').on('click', function(){
-    window_rails.confirm.action = {};
-    window_rails.confirm.close();
-  });
-  $('.window-rails-confirm-ok').on('click', window_rails.confirm.execute);
+window_rails.hooks.init = function(){
+  window_rails.hooks.init_links();
+  $(dom_filter + ' .window-rails-confirm-cancel').on('click', window_rails.hooks.close_confirm)
+  $(dom_filter + ' .window-rails-confirm-ok').on('click', window_rails.confirm.execute);
+}
+
+/**
+ * Hook links to handle window rails
+ *
+ * @param dom_filter [String]
+ **/
+window_rails.hooks.init_links = function(dom_filter){
+  if(!dom_filter){
+    dom_filter = '';
+  }
+  $(dom_filter + ' .window-rails').on('click', window_rails.hooks.open_window);
 }
 
 // Initialize once page has loaded
