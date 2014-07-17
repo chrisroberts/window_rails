@@ -438,8 +438,8 @@ window_rails.hooks.close_confirm = function(){
  **/
 window_rails.hooks.init = function(){
   window_rails.hooks.init_links();
-  $(dom_filter + ' .window-rails-confirm-cancel').on('click', window_rails.hooks.close_confirm)
-  $(dom_filter + ' .window-rails-confirm-ok').on('click', window_rails.confirm.execute);
+  $('.window-rails-confirm-cancel').on('click', window_rails.hooks.close_confirm)
+  $('.window-rails-confirm-ok').on('click', window_rails.confirm.execute);
 }
 
 /**
