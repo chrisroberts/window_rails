@@ -97,11 +97,21 @@ module WindowRails
 
     # Update the contents of the window
     #
+    # @param options [Hash]
     # @option options [String] :title title of window
     # @option options [String] :content content of window
     # @option options [String] :footer content of footer
     def update_window(name, options={})
       create_window(options.merge(:name => name, :show => false))
+    end
+
+    # Add popover support
+    #
+    # @param options [Hash]
+    # @return [TrueClass]
+    def popover(element, options={})
+      self << "$('#{element}').popover(#{format_type_to_js(options)});"
+      true
     end
 
   end
