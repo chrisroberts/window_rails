@@ -15,6 +15,20 @@ Add window_rails to your application Gemfile:
   gem 'window_rails'
 ```
 
+and then update your application manifests:
+
+```
+// app/assets/javascripts/application.js
+//= require window_rails
+```
+
+```
+/*
+* app/assets/stylesheets/application.css
+*= require window_rails
+*/
+```
+
 ## Basic usage
 
 ### Show an alert
