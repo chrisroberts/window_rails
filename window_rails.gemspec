@@ -12,5 +12,5 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = ['README.md', 'LICENSE', 'CHANGELOG.md']
   s.add_dependency 'rails', '>= 3.0'
   s.add_dependency 'rails_javascript_helpers', '~> 1.0'
-  s.files = %w(LICENSE README.md CHANGELOG.md) + Dir.glob("lib/**/*")
+  s.files = %w(LICENSE README.md CHANGELOG.md) + Dir.glob("lib/**/*") + Dir.glob("app/**/*")
 end
