@@ -2,6 +2,11 @@
 
 Rails helper for easy to use modals via bootstrap.
 
+## Important note
+
+As of the 1.0 release, window_rails has been re-implemented
+using bootstrap as the core.
+
 ## Requirements
 
 * jQuery
