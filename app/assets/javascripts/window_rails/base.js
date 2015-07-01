@@ -82,7 +82,7 @@ window_rails.open_window = function(name, args){
     }
   }
 
-  backdrop = args.backdrop == undefined ? true : args.backdrop;
+  backdrop = args && args.backdrop == undefined ? true : args.backdrop;
   if(backdrop && args.static_backdrop){
     backdrop = 'static';
   }
