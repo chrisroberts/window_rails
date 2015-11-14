@@ -204,8 +204,10 @@ window_rails.confirm.execute = function(){
         auto_close: window_rails.config('confirm_info_auto_close', 5)
       });
     });
-  } else {
+  } else if(args.url) {
     document.location = args.url;
+  } else if(args.callback) {
+    window[args.callback]();
   }
 }
 
@@ -421,7 +423,8 @@ window_rails.hooks.open_window = function(){
     url: $(this).attr('window-rails-url'),
     progress: $(this).attr('window-rails-progress'),
     complete: $(this).attr('window-rails-complete'),
-    error: $(this).attr('window-rails-error')
+    error: $(this).attr('window-rails-error'),
+    callback: $(this).attr('window-rails-callback')
   });
 }
 
