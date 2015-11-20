@@ -1,3 +1,8 @@
+# v1.0.4
+* Update loader content
+* Re-hook after AJAX requests to auto-enable additions
+* Provide local context to callback on confirmation
+
 # v1.0.2
 * Support custom callback on confirmation accept
 
