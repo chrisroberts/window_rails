@@ -207,7 +207,7 @@ window_rails.confirm.execute = function(){
   } else if(args.url) {
     document.location = args.url;
   } else if(args.callback) {
-    window[args.callback]();
+    window[args.callback](args.element);
   }
 }
 
@@ -233,7 +233,7 @@ window_rails.loading.open = function(style, title){
   if(style == 'progress'){
     content = '<div class="progress progress-striped active look-busy"><div class="progress-bar progress-bar-info" aria-valuemax="100" aria-valuemin="0" aria-valuenow="5" role="progressbar" style="width: 5%"></div></div>';
   } else {
-    content = '<div style="height: 50px" class="' + style + ' csspinner no-overlay standard" />';
+    content = '<center><i class="fa fa-spinner fa-4x fa-pulse" /></center>';
   }
   window_rails.open_window('loading', {
     esc_close: false,
@@ -307,9 +307,11 @@ window_rails.initialize_window = function(args){
   }
   name = window_rails.namer(args.name);
   if(args.size == 'large'){
-    size = 'lg';
+    size = 'modal-lg';
+  } else if(args.size == 'small'){
+    size = 'modal-sm';
   } else {
-    size = window_rails.config('default_size', 'sm');
+    size = window_rails.config('default_size', '');
   }
   if(args.footer){
     footer = '\
@@ -322,7 +324,7 @@ window_rails.initialize_window = function(args){
   }
   $('#window-rails-container').append('\
     <div id="' + name + '" class="modal fade" role="modal" aria-labelledby="' + name + '" aria-hidden="true">\
-      <div class="modal-dialog modal-' + size + '">\
+      <div class="modal-dialog ' + size + '">\
         <div class="modal-content">\
           <div class="modal-header">\
             <button class="close" type="button" data-dismiss="modal" aria-hidden="true">\
@@ -400,7 +402,7 @@ window_rails.init = function(){
                 <b class="modal-title">Loading...</b>\
               </div>\
               <div class="modal-body">\
-                <div style="height: 50px" class="csspinner no-overlay standard" />\
+                <center><i class="fa fa-spinner fa-4x fa-pulse" /></center>\
               </div>\
             </div>\
           </div>\
@@ -424,8 +426,10 @@ window_rails.hooks.open_window = function(){
     progress: $(this).attr('window-rails-progress'),
     complete: $(this).attr('window-rails-complete'),
     error: $(this).attr('window-rails-error'),
-    callback: $(this).attr('window-rails-callback')
+    callback: $(this).attr('window-rails-callback'),
+    element: $(this)
   });
+  return false;
 }
 
 /**
@@ -459,3 +463,5 @@ window_rails.hooks.init_links = function(dom_filter){
 
 // Initialize once page has loaded
 $(document).ready(window_rails.init);
+$(document).on('page:load', window_rails.init);
+$(document).ajaxComplete(window_rails.hooks.init);
