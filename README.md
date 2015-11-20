@@ -317,9 +317,11 @@ a link. Using the rails link helper:
     'window-rails-ajax' => 'post'
   )
 %>
+```
 
 Or use a callback:
 
+```erb
 <%=
   link_to('Thing', do_thing_path,
     'class' => 'window-rails',
@@ -328,6 +330,7 @@ Or use a callback:
     'window-rails-title' => 'Thing Doer',
   )
 %>
+```
 
 ## Infos
 
