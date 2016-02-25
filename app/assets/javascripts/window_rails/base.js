@@ -207,7 +207,15 @@ window_rails.confirm.execute = function(){
   } else if(args.url) {
     document.location = args.url;
   } else if(args.callback) {
-    window[args.callback](args.element);
+    callback_func = args.callback.split('.').reduce(function(pv, cv){
+      return pv[cv];
+    }, window);
+    if(callback_func){
+      callback_func(args.element);
+    } else {
+      console.log('Failed to locate defined callback: ' + args.callback);
+      alert('Unexpected failure encountered attempting to complete request!');
+    }
   }
 }
 
